@@ -1,0 +1,38 @@
+nav{
+    background: linear-gradient(90deg, rgba(130,87,214,1) 10%, rgba(235,248,192,1) 100%);
+    position: absolute;
+    display: flex;
+    width: 100vw;
+    top: 0;
+    justify-content: space-between;
+    z-index: 1;
+}
+
+.icon, .icon-arrow{
+    cursor: pointer;
+    font-size: 60px;
+    margin: 5%;
+    margin-right: 10px;
+    color: #01050d;
+    z-index: 3;
+}
+.icon-arrow{
+    margin: 0;
+    font-size: 30px;
+}
+.icon:hover{
+    cursor: pointer;
+    color: rgb(26, 26, 26);
+}
+
+.sec1{
+    display: flex;
+}
+
+.icons-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
