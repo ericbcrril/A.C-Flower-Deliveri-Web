@@ -1,5 +1,4 @@
 import '../../styles/components/shoppingCart.css';
-import {Link} from 'react-router-dom';
 import { MdCancel } from "react-icons/md";
 
 

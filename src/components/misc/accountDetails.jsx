@@ -1,6 +1,4 @@
 import '../../styles/components/accountDetails.css';
-import {Link} from 'react-router-dom';
-import { MdCancel } from "react-icons/md";
 
 
 function AccountDetails({visible}){

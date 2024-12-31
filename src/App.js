@@ -29,6 +29,19 @@ function App() {
           }
         />
         <Route
+          path="/A.C-Flower-Deliveri-Web"
+          element={
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ y: "-100%" }}
+              transition={{ duration: 0.5 }}
+              style={{height: "100%"}}>
+              <Home />
+            </motion.div>
+          }
+        />
+        <Route
           path="/Menu"
           element={
             <motion.div
