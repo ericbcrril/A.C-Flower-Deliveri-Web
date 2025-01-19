@@ -1,0 +1,128 @@
+@keyframes Apearleft {
+    from{
+        translate: -100% 0;
+    }
+    to{
+        translate: 0 0;
+    }
+}
+@keyframes Apearup {
+    from{
+        translate: 0 -100%;
+    }
+    to{
+        translate: 0 0;
+    }
+}
+
+.navMenu, .accountDetails, .shopping-cart{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    padding: 30px;
+    background-color: rgba(1, 5, 13, .99);
+    border-radius: 0px 20px 20px 0px;
+}
+/*Menu de navegacion*/
+.navMenu{
+    height: 350px;
+    top: 80px;
+    left: 0;
+    animation: Apearleft .5s forwards;
+}
+.navMenu a{
+    font-size: x-large;
+    color: white;
+    text-decoration: none;
+    border-bottom: .5px solid white;
+    margin: 15px;
+}
+.navMenu a:hover{
+    color: rgb(210, 210, 210);
+}
+/*Detalles de cuenta*/
+
+.accountDetails p{
+    font-size: medium;
+    color: white;
+    text-decoration: none;
+    margin: 15px;
+}
+.accountDetails button{
+    border: .5px solid rgba(255, 255, 255, .5);
+}
+
+/*Carrito*/
+
+.shopping-cart, .accountDetails{
+    justify-content: space-evenly;
+    height: 50vh;
+    top: 90px;
+    right: 0;
+    border-radius: 20px;
+    animation: Apearup .5s forwards;
+    z-index: 5;
+    width: 20%;
+}
+.accountDetails{width: fit-content; height: fit-content;}
+
+.orders-div{
+    display: flex;
+    flex-direction: column;
+    height: 70%;
+    overflow-y: scroll;
+    scrollbar-color: white transparent;
+    scrollbar-width: thin;
+}
+
+.shopping-cart p{
+    font-size: medium;
+    color: white;
+    text-decoration: none;
+    border-bottom: .5px solid white;
+    margin: 15px;
+    width: 50%;
+    text-wrap: nowrap;
+}
+.shopping-cart input, .order-details-section input, .order-details-section textarea{
+    all: unset;
+    background-color: white;
+    font-size: small;
+    width: 90%;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+    border: none;
+}
+.shopping-cart div{
+    display: flex;
+    align-items: normal;
+}
+.shopping-cart button{
+    border: .5px solid rgba(255, 255, 255, .5);
+}
+
+.order-details-section{
+    position: fixed;
+    right: 25vw;
+    padding: 25px;
+    display: flex;
+    border-radius: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: rgba(1, 5, 13, .99);
+    z-index: 2;
+    height: fit-content;
+    width: fit-content;
+}
+
+.order-details-section select{
+    background-color: white;
+    font-size: small;
+    width: 50%;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+    border: none;
+}

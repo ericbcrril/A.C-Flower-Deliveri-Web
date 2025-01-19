@@ -9,6 +9,26 @@ html, body{
   margin: 0;
 }
 
+button {
+  background-color: #01050d; 
+  border: .5px solid rgba(255, 255, 255, .5) !important;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:active {
+  background-color: white;
+}
+
+button:hover {
+  border: .5px solid rgba(255, 255, 255, 1) !important;
+}
+
 .App {
   text-align: center;
 }

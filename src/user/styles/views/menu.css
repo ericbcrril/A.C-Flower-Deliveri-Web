@@ -1,0 +1,35 @@
+main{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.h1-menu{
+    pointer-events: none;
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    width: 100%;
+    z-index: 2;
+}
+
+section{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.trl10{
+    translate: 0 10px;
+}
+.trl-10{
+    translate: 0 -10px;
+}
+
+.menu-opt{
+    text-decoration: none;
+    color: #191919;
+}

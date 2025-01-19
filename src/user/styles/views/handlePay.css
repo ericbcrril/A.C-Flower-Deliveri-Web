@@ -1,0 +1,21 @@
+.handlePay-container-message{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color:white;
+    height: 40vh;
+    width: 45vw;
+    border-radius: 20px;
+}
+
+.handlePay-container-message p{
+    font-size: large;
+}
+.handlePay-container-message a{
+    color: blue;
+}
+.handlePay-container-message button{
+    width: 70px;
+    font-size: x-large;
+}

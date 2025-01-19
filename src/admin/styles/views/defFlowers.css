@@ -1,0 +1,102 @@
+html{
+    background: linear-gradient(135deg, #9c27b0, #ffeb3b) !important;
+}
+.main-defFlowers{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.container-data{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    height: fit-content;
+    width: 33%;
+    padding: 25px;
+    margin: 4%;
+    margin-top: 10%;
+    border-radius: 10% 0px 10% 0px;
+    transition: all .3s;
+}
+
+.container-data img{
+    height: 7vw;
+    width: 7vw;
+    border: 1px solid #01050d;
+}
+
+.container-data form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.table-container{
+    overflow-y: scroll;
+    max-height: 60vh;
+}
+.table-container0{
+    overflow-y: scroll;
+    max-height: 25vh;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-y: scroll;
+}
+
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    max-width: 140px;
+    border-bottom: 1px solid #ddd;
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
+th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+}
+
+input[type='text'], input[type='email'], input[type='number'], textarea{
+    resize: none;
+    padding: 10px;
+    margin: 2%;
+    border-radius: 10px;
+    border: .5px solid #01050d;
+}
+input[type='file']{
+    margin: 2% 2% 2% 18%;
+}
+input[type="file"]::-webkit-file-upload-button {
+    background-color: #01050d; 
+    border: .5px solid rgba(255, 255, 255, .5) !important;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+  
+input[type="file"]::-webkit-file-upload-button:active {
+    background-color: white;  
+}
+input[type="file"]::-webkit-file-upload-button:hover {
+    border: .5px solid rgba(255, 255, 255, 1) !important;  
+}
+select{
+    all: unset;
+    border: .5px solid black;
+    padding: 5px;
+    border-radius: 10px;
+}

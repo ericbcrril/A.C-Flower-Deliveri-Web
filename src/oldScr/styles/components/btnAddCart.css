@@ -1,0 +1,38 @@
+.btnAddCart{
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #01050d;
+    border-radius: 35px;
+    width: 100px;
+    padding: 5px 5px 5px 5px;
+    transition: scale .2s, background-color .3s;
+}
+
+.btnAddCart div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-left: 0;
+}
+
+.btnAddCart p{
+    all: unset;
+    color: white;
+    font-size: small;
+    margin-right: 15px;
+}
+
+.btnAddCart:hover{
+    scale: 1.1;
+    cursor: pointer;
+}
+
+.btnAddCart:active{
+    background-color: white;
+}

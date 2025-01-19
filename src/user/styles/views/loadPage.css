@@ -1,0 +1,22 @@
+.main-loadPage{
+    display: flex;
+    flex-direction: column;
+}
+
+.load-div0{
+    position: absolute;
+}
+.load-div0 img{
+    width: 300px;
+}
+
+.load-div1{
+    bottom: -100px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.load-div1 img{
+    position: relative;
+    width: 33%;
+}

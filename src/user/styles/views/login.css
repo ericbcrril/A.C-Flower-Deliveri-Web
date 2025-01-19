@@ -1,0 +1,40 @@
+.login-main{
+    
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 5%;
+    margin: 5%;
+    background-color: rgba(1, 5, 13, .99);
+    width: 20%;
+    height: 70%;
+    border-radius: 20px;
+    box-shadow: 0px 1px 5px rgba(255, 255, 255, 1);
+}
+
+.login-form hr{
+    width: 100%;
+}
+
+.login-form input{
+    all: unset;
+    background-color: white;
+    font-size: small;
+    width: 90%;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+    border: none;
+}
+.login-form select{
+    background-color: white;
+    font-size: small;
+    padding: 5px;
+    border-radius: 10px;
+    border: none;
+}
+
