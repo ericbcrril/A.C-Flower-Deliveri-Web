@@ -11,3 +11,13 @@ main{
 .main-logo500:active{
     scale: 1;
 }
+
+@media (max-width: 450px) {
+    .main-home{
+        display: flex;
+        justify-content: center;
+    }
+    .main-logo500{
+        width: 100vw;
+    }
+}

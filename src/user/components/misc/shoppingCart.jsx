@@ -177,6 +177,7 @@ function ShoppingCart({ visible, isLogged }) {
           </div>
           <textarea name="letter" placeholder='Carta (Opcional)' rows={3}></textarea>
           <button type='submit' style={{ width: '100%' }}>Pagar</button>
+          <button onClick={() => setOrderFormVisible(false)} style={{ width: '100%' }}>Cancelar</button>
         </form>
       </section>
     </section>

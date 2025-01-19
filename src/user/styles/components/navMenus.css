@@ -126,3 +126,52 @@
     border-radius: 10px;
     border: none;
 }
+
+@media (max-width: 450px) {
+    .navMenu, .accountDetails, .shopping-cart{
+    }
+    /*Menu de navegacion*/
+    .navMenu{
+    }
+    .navMenu a{
+    }
+    .navMenu a:hover{
+    }
+    /*Detalles de cuenta*/
+    
+    .accountDetails p{
+        
+    }
+    .accountDetails button{
+    }
+    
+    /*Carrito*/
+    
+    .shopping-cart, .accountDetails{
+        width: 50vw;
+        min-height: 20vh;
+        height: fit-content;
+        top: 65px;
+    }
+    .accountDetails{width: fit-content; height: fit-content;}
+    
+    .orders-div{
+    }
+    
+    .shopping-cart p{
+    }
+    .shopping-cart input, .order-details-section input, .order-details-section textarea{
+    }
+    .shopping-cart div{
+    }
+    .shopping-cart button{
+    }
+    
+    .order-details-section{
+        right: 20vw;
+        top: 10dvh;
+    }
+    
+    .order-details-section select{
+    }
+}

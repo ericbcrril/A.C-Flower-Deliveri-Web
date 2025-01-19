@@ -44,7 +44,7 @@ function MakeFlowers({isLogged}) {
   const [bouquetSize, setBouquetSize] = useState(10); // Tamaño inicial del ramo
 
   const flowerOptions = [
-    { id: "0", type: "🌹" },
+    { id: "0", type: "🌹"},
     { id: "1", type: "🌻" },
     { id: "2", type: "🌸" },
     { id: "3", type: "🌼" },
@@ -59,6 +59,7 @@ function MakeFlowers({isLogged}) {
     { id: "3", type: "🍬" }
   ];
 
+ 
 
   const flowerPositions = useMemo(() => {
     const positions = [];

@@ -33,3 +33,33 @@ section{
     text-decoration: none;
     color: #191919;
 }
+
+@media (max-width: 450px) {
+    main{
+        height: 100vh;
+        justify-content: start;
+        overflow: auto;
+    }
+
+    .h1-menu{
+        padding-left: 20%;
+        justify-content: start;
+        font-size: x-small;
+    }
+    
+    section{
+        flex-direction: column;
+    }
+
+    .menu-opt{
+        margin-top: 15%;
+    }
+
+    .btn-subs{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        padding: 10px;
+        z-index: 3;
+    }
+}

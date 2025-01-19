@@ -1,3 +1,7 @@
+html{
+    background: linear-gradient(135deg, #9c27b0, #ffeb3b) !important;
+}
+
 .main-content {
     display: flex;
     flex-direction: row;

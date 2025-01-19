@@ -24,7 +24,7 @@ function Menu({isLogged}){
             </section>
             <section>
                 <Link to="/">
-                <button>Subscripciones</button>                
+                <button className='btn-subs'>Subscripciones</button>                
                 </Link>
             </section>
         </main>

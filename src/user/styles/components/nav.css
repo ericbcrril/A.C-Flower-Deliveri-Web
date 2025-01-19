@@ -36,3 +36,18 @@ nav{
     justify-content: center;
     align-content: center;
 }
+
+@media (max-width: 450px) {
+    nav{
+    }
+    
+    .icon, .icon-arrow{
+        cursor: pointer;
+        font-size: 40px;
+        margin: 5%;
+    }
+    .icon-arrow{
+        margin: 0;
+        font-size: 20px;
+    }
+}

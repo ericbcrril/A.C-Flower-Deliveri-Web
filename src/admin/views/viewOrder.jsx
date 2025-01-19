@@ -63,7 +63,7 @@ function ViewOrder({isLogged}) {
     
         // Cleanup para cancelar el temporizador si el efecto vuelve a ejecutarse
         return () => clearTimeout(debounceTimer);
-    }, [orderDetails?.state]);
+    }, [orderDetails?.id, JSON.stringify(orderDetails?.state)]); // Evita bucles comparando estados como strings
     
 
     function handleClickView(data){
