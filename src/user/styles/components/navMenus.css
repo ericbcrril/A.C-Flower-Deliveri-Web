@@ -56,12 +56,13 @@
 
 .shopping-cart, .accountDetails{
     justify-content: space-evenly;
-    height: 50vh;
+    height: fit-content;
+    max-height: 50dvh;
     top: 90px;
     right: 0;
     border-radius: 20px;
     animation: Apearup .5s forwards;
-    z-index: 5;
+    z-index: 3;
     width: 20%;
 }
 .accountDetails{width: fit-content; height: fit-content;}
@@ -127,24 +128,26 @@
     border: none;
 }
 
+/*Tablet Portrait*/
+@media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
+    /*Carrito*/
+    
+    .shopping-cart, .accountDetails{
+        width: 30vw;
+        min-height: 20vh;
+        height: fit-content;
+        top: 100px;
+    }
+    .accountDetails{width: fit-content; height: fit-content;}
+    
+    .order-details-section{
+        right: 20vw;
+        top: 10dvh;
+    }
+}
+
+/*Mobile Portrait*/
 @media (max-width: 450px) {
-    .navMenu, .accountDetails, .shopping-cart{
-    }
-    /*Menu de navegacion*/
-    .navMenu{
-    }
-    .navMenu a{
-    }
-    .navMenu a:hover{
-    }
-    /*Detalles de cuenta*/
-    
-    .accountDetails p{
-        
-    }
-    .accountDetails button{
-    }
-    
     /*Carrito*/
     
     .shopping-cart, .accountDetails{
@@ -154,24 +157,47 @@
         top: 65px;
     }
     .accountDetails{width: fit-content; height: fit-content;}
-    
-    .orders-div{
-    }
-    
-    .shopping-cart p{
-    }
-    .shopping-cart input, .order-details-section input, .order-details-section textarea{
-    }
-    .shopping-cart div{
-    }
-    .shopping-cart button{
-    }
-    
+   
     .order-details-section{
         right: 20vw;
         top: 10dvh;
     }
+}
+
+/*Mobile Landscape*/
+@media (max-height: 450px) and (min-width: 650px) and (max-width: 950px) {
     
-    .order-details-section select{
+    /*Menu de navegacion*/
+    .navMenu{
+        height: 50dvh;
+    }
+    .navMenu a{
+        font-size: small;
+    }
+    /*Detalles de cuenta*/
+    
+    .accountDetails p{
+        font-size: small;
+    }
+    
+    /*Carrito*/
+    
+    .shopping-cart, .accountDetails{
+        width: calc(fit-content + 10px);
+        min-height: 20vh;
+        height: fit-content;
+        max-height: 50dvh;
+        top: 95px;
+    }
+    .accountDetails{width: fit-content; height: fit-content;}
+    
+    .order-details-section{
+        right: 20vw;
+        top: -10dvh;
+        max-height: 70dvh;
+        overflow-y: scroll;
+        scrollbar-color: white transparent;
+        scrollbar-width: thin;
+        font-size: small;
     }
 }

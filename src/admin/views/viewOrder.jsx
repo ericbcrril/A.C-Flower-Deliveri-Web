@@ -1,10 +1,10 @@
+import React from 'react';
 import '../styles/views/viewOrder.css';
 import NavBar from "../components/misc/navbar";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getItems, updateItems } from '../../scripts/apis';
 import { FaCheck } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-
 
 function ViewOrder({isLogged}) {
     const [orders, setOrders] = useState([]);
@@ -87,11 +87,50 @@ function ViewOrder({isLogged}) {
         }
     };
         
+//Ver Ramo 
+    // Calcular posiciones de flores en función del tamaño del ramo
+      const [winW, setWinW] = useState(window.innerWidth);
+      const [bouquetVisible, setBouquetVisible] = useState(false);
+    
+  // Manejar el evento de redimensionamiento de la ventana
+    useEffect(() => {
+      const handleResize = () => setWinW(window.innerWidth);
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
 
+  const flowerPositions = useMemo(() => {
+    const positions = [];
+    const center = { x: 0, y: 0 };
+    positions.push(center);
+
+    const createCircle = (count, radius) => {
+      const angleIncrement = (2 * Math.PI) / count;
+      for (let i = 0; i < count; i++) {
+        const angle = i * angleIncrement;
+        positions.push({
+          x: radius * Math.cos(angle),
+          y: radius * Math.sin(angle),
+        });
+      }
+    };
+
+
+      createCircle(9, winW / 18);
+      createCircle(13, winW / 11);
+      createCircle(20, winW / 8);
+
+    return positions;
+  }, [winW]);
+
+    //const [flowers, setFlowers] = useState(Array(10).fill(null));
+    const [flowers, setFlowers] = useState([]);
     return (
         <>
             <NavBar isLogged={isLogged}/>
-            <div className=''><h1 className='h1-menu'>A.C Flowers Delivery</h1></div>
+            <div className='h1-menu'><h1>A.C Flowers Delivery</h1></div>
 
             <main className="main-content">
                 <section className='order-section'>
@@ -114,6 +153,7 @@ function ViewOrder({isLogged}) {
                                             <button onClick={() => handleClickView({
                                                 id: order._id,
                                                 items: order.items,
+                                                bouquet: order.bouquet,
                                                 receiver: order.receiver,
                                                 date: order.date,
                                                 time: order.time,
@@ -234,12 +274,26 @@ function ViewOrder({isLogged}) {
                             </tr>
                             {
                             orderDetails?.items ?
-                            orderDetails?.items.map((item) => (
+                            <>
+                            {orderDetails?.items.map((item) => (
                                 <tr >
                                     <td>{item?.name}</td>
                                     <td>{item?.price}$ MXN</td>
                                 </tr>
-                            ))
+                            ))}
+                            {orderDetails?.bouquet && Array.isArray(orderDetails?.bouquet) && orderDetails.bouquet.length > 0 ? (
+                                <>
+                                    <tr>
+                                        <td>Ramo Personalizado</td>
+                                        <td>
+                                            {orderDetails?.bouquet?.reduce((sum, item) => sum + (item.price || 0), 0)}$ MXN
+                                        </td>
+                                    </tr>
+                                    <button style={{translate: '120px'}} onClick={()=>setBouquetVisible(true)}>Ver Ramo</button>
+                                </>
+                            ) : <p>No hay ramo personalizado</p>}
+
+                                </>
                             :
                             <p>Nada por aqui</p>
                             }
@@ -267,6 +321,7 @@ function ViewOrder({isLogged}) {
                                             <button onClick={() => handleClickView({
                                                 id: order._id,
                                                 items: order.items,
+                                                bouquet: order.bouquet,
                                                 receiver: order.receiver,
                                                 date: order.date,
                                                 time: order.time,
@@ -283,7 +338,31 @@ function ViewOrder({isLogged}) {
                         </table>
                     </div>
                 </section>
-
+                <section style={{display: bouquetVisible ? '':'none'}} className=''>
+                         {/* Flores */}
+                        <div className="flowers-container-order">
+                            {flowerPositions?.map((position, index) => (
+                            <div
+                                key={index}
+                                className="flower-position-order"
+                                style={{
+                                top: `calc(45% - ${position.y}px)`,
+                                left: `calc(40% + ${position.x}px)`,
+                                }}
+                            >
+                                {orderDetails?.bouquet && Array.isArray(orderDetails?.bouquet) && orderDetails?.bouquet[index]?.image && (
+                                    <img
+                                    src={orderDetails?.bouquet[index]?.image}
+                                    alt={orderDetails?.bouquet[index]?.name}
+                                    title={orderDetails?.bouquet[index]?.name}
+                                    style={{ width: "50px", height: "50px" }}
+                                    />
+                                )}
+                            </div>
+                            ))}
+                            <button onClick={() => setBouquetVisible(false)}>X</button>
+                        </div>
+                </section>
             </main>
         </>
     );

@@ -20,3 +20,50 @@
     position: relative;
     width: 33%;
 }
+
+/*Tablet portrait*/
+@media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
+    .main-loadPage{
+        height: 100dvh;
+        justify-content: center;
+    }
+    
+    .load-div0{
+        position: absolute;
+    }
+    .load-div0 img{
+        width: 300px;
+    }
+    
+    .load-div1{
+        position: fixed;
+        bottom: 0;
+    }
+}
+
+/*Mobile Portrait*/
+@media (max-width: 450px) {
+    .main-loadPage{
+        height: 100dvh;
+        justify-content: center;
+    }
+    
+    .load-div0{
+        position: absolute;
+    }
+    .load-div0 img{
+        width: 300px;
+    }
+    
+    .load-div1{
+        position: fixed;
+        bottom: 0;
+    }
+}
+/*Mobile Landscape*/
+@media (max-height: 450px) and (min-width: 650px) and (max-width: 950px) {
+    .main-loadPage{
+        height: 100dvh;
+        justify-content: center;
+    }
+}

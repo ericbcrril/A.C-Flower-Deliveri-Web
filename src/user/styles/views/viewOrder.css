@@ -1,3 +1,12 @@
+@keyframes Apearup {
+    from{
+        translate: 0 -100%;
+    }
+    to{
+        translate: 0 0;
+    }
+}
+
 .main-content {
     display: flex;
     flex-direction: row;
@@ -66,4 +75,176 @@ button {
 
 button:active {
     background-color: white;
+}
+
+.bouquet-container{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    z-index: 5;
+}
+
+.bouquet-container div{
+    background-color: white;
+    border-radius: 50px;
+    height: 80vh;
+    width: 80vh;
+    border: 1px solid black;
+}
+
+.flowers-container-order{
+    position: absolute;
+    top: 20vh; left: 30vw;
+    background-color: white;
+    width: 35vw;
+    height: 35vw;
+    border-radius: 40px;
+    animation: Apearup .5s forwards;
+}
+
+.flower-position-order{
+    background-color: transparent;
+    position: absolute;
+    width: 4vw;
+    height: 4vw;
+    border: 2px dashed #555;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: xx-large;
+    transition: all 0.3s ease;
+  }
+
+/*Tablet portrait*/
+@media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
+    .main-content {
+        gap: 10px;
+        padding: 10px;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .order-section, .details-section, .progress-section {
+        margin: 10px;
+        width: 100dvw;
+        animation: Apearup .5s forwards;
+    }
+    .order-section{
+        margin-top: 15%;
+    }
+    .details-section{
+        position: absolute;
+        width: 85dvw;
+    }
+    .progress-section{
+        position: absolute;
+        justify-content: center;
+        width: 90dvw;
+        height: 500px;
+        background-color: white;
+        border-radius: 20px;
+    }
+
+    .bouquet-container{
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        z-index: 5;
+    }
+    
+    .bouquet-container div{
+        background-color: white;
+        border-radius: 50px;
+        height: 30vh;
+        width: 90vw;
+        border: 1px solid black;
+    }
+    
+    .flowers-container-order{
+        top: 18dvh; left: 0vw;
+        width: 100vw;
+        height: 75dvh;
+        animation: Apearup .5s forwards;
+    }
+    
+    .flower-position-order{
+        width: 50px;
+        height: 50px;
+      }
+}
+
+/*Mobile Portrait*/
+@media (max-width: 450px) {
+    .main-content {
+        gap: 10px;
+        padding: 10px;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .order-section, .details-section, .progress-section {
+        margin: 10px;
+        width: 100dvw;
+        animation: Apearup .5s forwards;
+    }
+    .order-section{
+        margin-top: 15%;
+    }
+    .details-section{
+        position: absolute;
+        width: 85dvw;
+    }
+    .progress-section{
+        position: absolute;
+        justify-content: center;
+        width: 90dvw;
+        height: 500px;
+        background-color: white;
+        border-radius: 20px;
+    }
+
+    .bouquet-container{
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        z-index: 5;
+    }
+    
+    .bouquet-container div{
+        background-color: white;
+        border-radius: 50px;
+        height: 30vh;
+        width: 90vw;
+        border: 1px solid black;
+    }
+    
+    .flowers-container-order{
+        top: 18dvh; left: 0vw;
+        width: 100vw;
+        height: 75dvh;
+        animation: Apearup .5s forwards;
+    }
+    
+    .flower-position-order{
+        width: 50px;
+        height: 50px;
+      }
+}
+
+/*Mobile Landscape*/
+@media (max-height: 450px) and (min-width: 650px) and (max-width: 950px) {
+    *{
+        font-size: small;
+    }
 }

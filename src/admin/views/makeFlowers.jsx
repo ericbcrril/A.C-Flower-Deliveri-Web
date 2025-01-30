@@ -21,8 +21,8 @@ function DefFlowers({isLogged}) {
     const [items, setItems] = useState([]); 
      const getData = async () => {
             let response = await getItems('items');
-            let flowers = response.filter(response => response.type)
-            let items = response.filter(response => !response.type)
+            let flowers = response.filter(response => response.type === 'flower')
+            let items = response.filter(response => response.type === 'accessory')
             setFlowers(flowers);
             setItems(items);
         } 
@@ -83,6 +83,7 @@ function DefFlowers({isLogged}) {
             await updateItems('items', formUpdate._id, data); // Llama a tu API para actualizar
             setImg0(data.image);
             getData(); // Actualiza la lista de ramos
+            alert('Registro actualizado');
         } catch (error) {
             console.error('Error al actualizar el ítem:', error);
         }
@@ -123,6 +124,7 @@ function DefFlowers({isLogged}) {
             form.reset();
             setImg1(null);
             getData(); // Actualiza la lista de ramos
+            alert('Nuevo item registrado');
           } catch (error) {
             console.error("Error al crear el item:", error);
           }
@@ -215,9 +217,10 @@ function DefFlowers({isLogged}) {
                         <input type="file" name="img" accept=".png, .jpg, .jpeg, .webp" onChange={handleChangeImg} required/>
                         <input type="text" name="name" placeholder='Nombre' required/>
                         <input type="number" name="price" placeholder='Precio' required/>
-                        <select name="type" defaultValue={true}>
-                          <option value={true}>🌺 Flor</option>
-                          <option value={false}>🍬 Accesorio</option>
+                        <select name="type" defaultValue={'flower'}>
+                          <option value='flower'>🌺 Flor</option>
+                          <option value='foliage'>🌿 Follage</option>
+                          <option value='accessory'>🍬 Accesorio</option>
                         </select>
                         <button type='submit'>Guardar</button>
                         <button type='reset'>Cancelar</button>

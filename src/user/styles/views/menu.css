@@ -7,15 +7,6 @@ main{
     overflow: hidden;
 }
 
-.h1-menu{
-    pointer-events: none;
-    display: flex;
-    position: absolute;
-    justify-content: center;
-    width: 100%;
-    z-index: 2;
-}
-
 section{
     display: flex;
     flex-direction: row;
@@ -34,21 +25,79 @@ section{
     color: #191919;
 }
 
+/*Tablet portrait*/
+@media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
+    main{
+        height: 100vh;
+        justify-content: start;
+        overflow: auto;
+    }
+    
+    section{
+        flex-direction: column;
+    }
+
+    .menu-opt{
+        margin-top: 15%;
+    }
+
+    .btn-subs{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        padding: 10px;
+        z-index: 3;
+    }
+}
+
+/*Mobile Portrait*/
 @media (max-width: 450px) {
     main{
         height: 100vh;
         justify-content: start;
         overflow: auto;
     }
-
-    .h1-menu{
-        padding-left: 20%;
-        justify-content: start;
-        font-size: x-small;
-    }
     
     section{
         flex-direction: column;
+    }
+
+    .menu-opt{
+        margin-top: 15%;
+    }
+
+    .btn-subs{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        padding: 10px;
+        z-index: 3;
+    }
+}
+
+/*Mobile Landscape*/
+@media (max-height: 450px) and (min-width: 650px) and (max-width: 950px) {
+    main{
+        height: 100vh;
+        justify-content: start;
+        overflow: auto;
+    }
+
+    
+    section{
+        flex-direction: row;
+    }
+
+    .opt-rect{
+        margin-top: 0% !important;
+        width: 80px !important;
+        height: 100px !important;
+        font-size: small !important;
+        white-space: nowrap;
+    }
+    .opt-rect img{
+        width: 100px !important;
+        height: 100px !important;
     }
 
     .menu-opt{

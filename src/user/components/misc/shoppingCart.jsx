@@ -149,7 +149,8 @@ function ShoppingCart({ visible, isLogged }) {
         <form onSubmit={handleClickPay}>
           <input type="number" name='cp' placeholder='CP' />
           <div>
-            <select name="municipality" onChange={handleMunicipalityChange} defaultValue={'guadalajara'}>
+            <select name="municipality" onChange={handleMunicipalityChange}>
+              <option value="" defaultValue={''}>Selecciona una localidad</option>
               <option value="guadalajara">Guadalajara</option>
               <option value="zapopan">Zapopan</option>
             </select>

@@ -12,6 +12,17 @@ main{
     scale: 1;
 }
 
+
+@media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
+    .main-home{
+        display: flex;
+        justify-content: center;
+    }
+    .main-logo500{
+        width: 100vw;
+    }
+}
+
 @media (max-width: 450px) {
     .main-home{
         display: flex;

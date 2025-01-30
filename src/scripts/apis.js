@@ -42,7 +42,7 @@ export const createItems = async (collectionName , data) => {
     const response = await axios.post(`${BASE_URL}/${collectionName}`, data);
     console.log(response);
     
-    alert("Registro creado exitosamente");
+    //alert("Registro creado exitosamente");
     return handleResponse(response);
   } catch (error) {
     handleError(error);

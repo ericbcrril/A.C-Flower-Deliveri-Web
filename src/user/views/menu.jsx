@@ -13,13 +13,13 @@ function Menu({isLogged}){
         <main>
             <section>
                 <Link to="/Ramos" className='menu-opt'>
-                    <OptionRect w={200} img="width_150.jpeg" title="Ramos" className={"trl10"}/>                
+                    <OptionRect w={200} img="width_150.jpeg" title="Ramos" className={"trl10 opt-rect"}/>                
                 </Link>
                 <Link to="/ArmarRamo" className='menu-opt'>
-                    <OptionRect w={200} img="test.png" title="Armar Ramo" className={"trl-10"}/>
+                    <OptionRect w={200} img="test.png" title="Armar Ramo" className={"trl-10 opt-rect"}/>
                 </Link>
                 <Link to={isLogged.login ? "/ConsultarPedido":"/Login"} className='menu-opt'>
-                    <OptionRect w={200} img="logo512.png" title="Consultar pedido" className={"trl10"}/>
+                    <OptionRect w={200} img="logo512.png" title="Consultar pedido" className={"trl10 opt-rect"}/>
                 </Link>
             </section>
             <section>

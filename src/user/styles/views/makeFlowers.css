@@ -6,34 +6,36 @@
     display: flex;
     flex-direction: column;
     position: absolute;
+    align-items: center;
+    justify-content: center;
     left: 0; top: 100px;
     background-color: white;
     height: 68vh;
     width: 12vw;
     border-radius: 0px 20px 20px 0px;
+    overflow-y: auto;
+    scrollbar-color: #01050c transparent;
 }
 
-.accs-section-div0{
+.foliage-section{
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    position: absolute;
     align-items: center;
-    gap: 5%;
-    height: 100%;
-    width: 100%;
-    padding: 5% 0% 0% 0%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    scrollbar-color: gray rgba(0,0,0,0);
+    justify-content: center;
+    right: 0; top: 100px;
+    background-color: white;
+    height: 68vh;
+    width: 12vw;
+    border-radius: 20px 0px 0px 20px;
+    overflow-y: auto;
+    scrollbar-color: #01050c transparent;
 }
 
-.accs-section-div1{
-    height: 100%;
-    width: 100%;
-}
 
 .bottom-section{
     position: absolute;
+    flex-direction: row-reverse;
     bottom: 0;
     right: 0;
     background-color: white;
@@ -65,7 +67,8 @@
     height: 100%;
     padding: 0 0 0 1%;
     overflow-y: hidden;
-    overflow-x: scroll;
+    overflow-x: auto;
+    scrollbar-color: #01050c transparent;
     gap: 2%;
 }
 .element-box {
@@ -81,6 +84,8 @@
     cursor: pointer;
     transition: all 0.3s ease;
     margin: 5px;
+    clip-path: circle(50% at center);
+    z-index: 2;
   }
   
   .element-box:hover {
@@ -104,9 +109,10 @@
     justify-content: center;
     position: absolute;
     right: 0px; top: 100px;
-    width: 91vw;
+    width: 99vw;
     height: 68vh;
     gap: 5%;
+    z-index: 1;
 }
 
 .accs-container, .flowers-container, .preview-container{
@@ -128,7 +134,7 @@
 }
 
 .flowers-container{
-    width: 30%;
+    width: 40vw;
     background-color: transparent;
 }
 
@@ -136,10 +142,11 @@
     width: 20%;
 }
 .flower-position {
-    background-color: #fafafa;
+    background-color: #555;
     position: absolute;
     width: 4vw;
     height: 4vw;
+    transform: translateX(5vw);
     border: 2px dashed #555;
     border-radius: 50%;
     display: flex;
@@ -159,7 +166,300 @@
   scale: 1.1;
   }    
   
+  .selected {
+    border: 2px solid yellow; /* 🔥 Destaca el ítem seleccionado */
+  }
+  
 
   /*html {
     background: linear-gradient(135deg, #9c27b0, #ffeb3b);
   }*/
+
+  /*Tablet portrait*/
+@media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
+   
+}
+
+/*Mobile Portrait*/
+@media (max-width: 450px){
+    .main-mkF{
+    }
+    
+    .accs-section, .foliage-section{
+        flex-direction: row;
+        justify-content: flex-start;
+        top: 8vh;
+        width: 50vw;
+        height: 10dvh;
+        border-radius: 0;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        border: .5px solid black;
+    }
+
+    .accs-section{        
+    }
+    
+    .foliage-section{
+    }
+    
+    
+    .bottom-section{
+        flex-direction: row-reverse;
+        height: 12dvh;
+    }
+    .bottom-section-div0{
+        width: 45dvw;
+    }
+    .bottom-section-div1{
+        width: fit-content;
+    }
+    .element-box {
+        width: 52px;
+        height: 52px;
+        margin: 10px;
+        clip-path: circle(100% at center);
+    }
+    .element-box-mobile {
+        width: 32px;
+        height: 32px;
+        margin: 10px;
+        clip-path: circle(50% at center);
+    }
+    .element-box-mobile img{
+        width: 25px !important;
+        height: 25px !important;
+    }
+    
+    .editor-section{
+        justify-content: space-between;
+        flex-direction: row;
+        height: 72%;
+    }
+    
+    .flowers-container, .preview-container{
+        height: 50dvh;
+    }
+
+    .accs-container h3{
+        font-size: x-small;
+    } 
+    
+    .accs-container{
+        width: 15%;
+        height: fit-content;
+    }
+    .accs-container hr{
+    }
+    
+    .flowers-container{
+        width: 40dvw;
+    }
+    
+    .foliage-section-position, .accs-section-position{
+        position: absolute;
+        bottom: 0;
+        width: fit-content;
+    }
+    .foliage-section-position{
+        right: 0;
+    }
+    .accs-section-position{
+        left: 0;
+    }
+    .foliage-section-position h3, .accs-section-position h3{
+        font-size: xx-small;
+        margin: 3px;
+    }
+    .foliage-section-position hr, .accs-section-position hr{
+        margin: 0;
+        padding: 0;
+    }
+    .foliage-section-position div, .accs-section-position div{
+        display: flex;
+        flex-direction: row;
+        margin:5px;
+    }
+
+    .flower-position {
+        background-color: #555;
+        position: absolute;
+        border: 2px dashed #555;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: xx-large;
+        transition: all 0.3s ease;
+        transform: translateY(-20px);
+        width: 45px;
+        height: 45px;
+      }
+
+      .flower-position img{
+        width: 40px !important;
+        height: 40px !important;
+      }
+      
+      .flower-position:empty {
+        background-color: transparent;
+      }
+    
+      .flower-position:hover {
+      background-color: #e0e0e0;
+      scale: 1.1;
+      }    
+    
+}
+
+
+
+/*Mobile Landscape*/
+@media (max-height: 450px) and (min-width: 650px) and (max-width: 950px) {
+    *{
+        font-size: x-small;
+    }
+
+    .accs-section, .foliage-section{
+        top: 70px;
+        height: 58vh;
+    }
+    
+    .bottom-section{
+        height: fit-content;
+    }
+
+    .bottom-section-div0{
+        padding: 5px;
+        width: 15vw;
+    } 
+    .bottom-section-div1{
+        gap: 0;
+        align-self: center;
+    }
+    .element-box {
+        width: 30px;
+        height: 30px;
+      }
+      .element-box img, .flower-position img{
+        width: 30px !important;
+        height: 30px !important;
+      }
+      .element-box-mobile {
+        width: 32px;
+        height: 32px;
+        margin: 10px;
+        clip-path: circle(50% at center);
+    }
+    .element-box-mobile img{
+        width: 25px !important;
+        height: 25px !important;
+    }
+    
+    .editor-section{
+        top: 70px;
+        align-items: start;
+    }
+    
+    .accs-container, .flowers-container, .preview-container{
+        height: fit-content;
+    }
+    
+    .accs-container{
+        width: 10%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .accs-container hr{
+        width: 100%;
+    }
+    
+    .flowers-container{
+        width: 40vw;
+        background-color: transparent;
+    }
+   
+    .flower-position {
+        width: 35px;
+        height: 35px;
+      }
+}
+
+/*Mobile Landscape*/
+@media (max-height: 390px) and (min-width: 650px) and (max-width: 950px) {
+    *{
+        font-size: xx-small;
+    }
+
+    .accs-section, .foliage-section{
+        top: 60px;
+        height: 48vh;
+    }
+    
+    .bottom-section{
+        height: fit-content;
+    }
+
+
+
+    .bottom-section-div0{
+        padding: 5px;
+        width: 15vw;
+    } 
+    .bottom-section-div1{
+        gap: 0;
+        align-self: center;
+    }
+    .element-box {
+        width: 30px;
+        height: 30px;
+      }
+      .element-box img, .flower-position img{
+        width: 20px !important;
+        height: 20px !important;
+      }
+      .element-box-mobile {
+        width: 22px;
+        height: 22px;
+        margin: 10px;
+        clip-path: circle(50% at center);
+    }
+    .element-box-mobile img{
+        width: 15px !important;
+        height: 15px !important;
+    }
+    
+
+
+    .editor-section{
+        top: 60px;
+        align-items: start;
+    }
+    
+    .accs-container, .flowers-container, .preview-container{
+        height: fit-content;
+    }
+    
+    .accs-container{
+        width: 10%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .accs-container hr{
+        width: 100%;
+    }
+    
+    .flowers-container{
+        width: 40vw;
+        background-color: transparent;
+    }
+   
+    .flower-position {
+        width: 25px;
+        height: 25px;
+        z-index: -1;
+      }
+}

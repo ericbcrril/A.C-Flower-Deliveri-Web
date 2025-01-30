@@ -15,6 +15,7 @@ const UserSettings = lazy(() => import('./user/views/userSettings'));
 const MakeFlowers = lazy(() => import('./user/views/makeFlowers'));
 const ViewOrder = lazy(() => import('./user/views/viewOrder'));
 const HandlePay = lazy(() => import('./user/views/handlePay'));
+const HandlePayBouquet = lazy(() => import('./user/views/handlePayBouquet'));
 //Views Administrador
 const AdminHome = lazy(() => import('./admin/views/home'));
 const AdminMenu = lazy(() => import('./admin/views/menu'));
@@ -75,6 +76,19 @@ function App() {
       <Suspense fallback={<LoadPage/>}>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
+            <Route
+              path="/loadPage"
+              element={
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ y: "-100%" }}
+                  transition={{ duration: 0.5 }}
+                  style={{height: "100%"}}>
+                  <LoadPage />
+                </motion.div>
+              }
+            />
             <Route
               path="/"
               element={
@@ -192,6 +206,19 @@ function App() {
                   transition={{ duration: 0.5 }}
                   style={{height: "100%"}}>
                   <HandlePay/>
+                </motion.div>
+              }
+            />
+            <Route
+              path="/handlePayBouquet"
+              element={
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ y: "-100%" }}
+                  transition={{ duration: 0.5 }}
+                  style={{height: "100%"}}>
+                  <HandlePayBouquet/>
                 </motion.div>
               }
             />

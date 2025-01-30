@@ -5,7 +5,7 @@ nav{
     width: 100vw;
     top: 0;
     justify-content: space-between;
-    z-index: 1;
+    z-index: 3;
 }
 
 .icon, .icon-arrow{
@@ -41,6 +41,18 @@ nav{
     nav{
     }
     
+    .icon, .icon-arrow{
+        cursor: pointer;
+        font-size: 40px;
+        margin: 5%;
+    }
+    .icon-arrow{
+        margin: 0;
+        font-size: 20px;
+    }
+}
+
+@media (max-height: 450px) {
     .icon, .icon-arrow{
         cursor: pointer;
         font-size: 40px;

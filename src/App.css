@@ -1,3 +1,4 @@
+
 html{
   background-color: rgb(130,87,214);
   background: linear-gradient(90deg, rgba(130,87,214,1) 10%, rgba(235,248,192,1) 100%);
@@ -28,6 +29,44 @@ button:active {
 button:hover {
   border: .5px solid rgba(255, 255, 255, 1) !important;
 }
+
+.h1-menu{
+  pointer-events: none;
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  width: 100%;
+  z-index: 5 !important;
+}
+
+/*Tablet portrait*/
+@media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
+  .h1-menu{
+    padding-left: 20%;
+    justify-content: start;
+    font-size: x-small;
+}
+}
+
+/*Mobile Portrait*/
+@media (max-width: 450px) {
+  .h1-menu{
+    padding-left: 20%;
+    justify-content: start;
+    font-size: x-small;
+}
+}
+/*Mobile Landscape*/
+@media (max-height: 450px) and (min-width: 650px) and (max-width: 950px) {
+  .h1-menu{
+    padding-left: 20%;
+    justify-content: start;
+    font-size: x-small !important;
+}
+}
+
+
+/*---------------*/
 
 .App {
   text-align: center;

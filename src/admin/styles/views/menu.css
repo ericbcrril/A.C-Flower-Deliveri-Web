@@ -10,15 +10,6 @@ main{
     overflow: hidden;
 }
 
-.h1-menu{
-    pointer-events: none;
-    display: flex;
-    position: absolute;
-    justify-content: center;
-    width: 100%;
-    z-index: 2;
-}
-
 section{
     display: flex;
     flex-direction: row;

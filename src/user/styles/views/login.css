@@ -38,7 +38,8 @@
     border: none;
 }
 
-@media (max-width: 450px) {
+/*Tablet portrait*/
+@media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
     .login-main{
         display: flex;
         align-items: center;
@@ -46,7 +47,7 @@
     }
     .login-form{
         width: 60vw;
-        height: 50dvh;
+        height: fit-content;
     }
     
     .login-form hr{
@@ -69,5 +70,50 @@
         padding: 5px;
         border-radius: 10px;
         border: none;
+    }
+}
+
+/*Mobile Portrait*/
+@media (max-width: 450px) {
+    .login-main{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .login-form{
+        width: 60vw;
+        height: fit-content;
+    }
+    
+    .login-form hr{
+        width: 100%;
+    }
+    
+    .login-form input{
+        all: unset;
+        background-color: white;
+        font-size: small;
+        width: 90%;
+        padding: 5px;
+        margin: 5px;
+        border-radius: 10px;
+        border: none;
+    }
+    .login-form select{
+        background-color: white;
+        font-size: small;
+        padding: 5px;
+        border-radius: 10px;
+        border: none;
+    }
+}
+
+/*Mobile Landscape*/
+@media (max-height: 450px) and (min-width: 650px) and (max-width: 950px) {
+    .login-form{
+        max-height: 65dvh;
+        overflow-y: scroll;
+        scrollbar-color: white transparent;
+        font-size: small;
     }
 }
