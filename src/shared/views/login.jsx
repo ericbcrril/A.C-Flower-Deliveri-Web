@@ -100,13 +100,13 @@ function Login({ isLogged }) {
           <LuUser color="white" size={102} />
           <div style={{ display: "flex", flexDirection: "column" }}>
             <input type="text" name="name" placeholder="Nombre" 
-                    maxLength={20} pattern=".*\S.*" autoComplete='name' required 
+                    minLength={1} maxLength={20} pattern=".*\S.*" autoComplete='name' required 
                     title="Máximo 20 caracteres"/>
             <input type="text" name="lastName" placeholder="Apellido" 
-                    maxLength={30} pattern=".*\S.*" autoComplete='name' required 
+                    minLength={1} maxLength={30} pattern=".*\S.*" autoComplete='name' required 
                     title="Máximo 30 caracteres"/>
             <input type="text" name="user" placeholder="Usuario" 
-                    maxLength={12} pattern="^\S+$" autoComplete='username' required 
+                    minLength={3} maxLength={12} pattern="^\S+$" autoComplete='username' required 
                     title="Máximo 12 caracteres, sin espacios vacíos"/>
             <input type="password" name="password" placeholder="Contraseña" 
                     minLength={8} pattern="^\S+$*" autoComplete='current-password' required 
@@ -119,7 +119,7 @@ function Login({ isLogged }) {
             <input type="email" name="email" placeholder="Email" autoComplete='email' 
                     title="Ingrese un correo electrónico válido" required/>
             <div>
-              <select name="codigo" defaultValue="+52">
+              <select name="codigo" defaultValue="+52" title="Selecciona tu código de país" required>
                 <option value="+52">🇲🇽 +52</option>
                 <option value="+01">🇺🇸 +1</option>
                 <option value="+44">🇬🇧 +44</option>
@@ -138,6 +138,7 @@ function Login({ isLogged }) {
                 pattern="[0-9]{10}"
                 title="Debe ser un número de 10 dígitos"
                 maxLength="10"
+                minLength={10}
                 required
                 autoComplete="mobile tel"
                 style={{ width: "60%" }}

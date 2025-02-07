@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import sanitizeStrings from '../../scripts/sanitizeStrings';
-import { getUser, updateItems } from '../../scripts/apis';
-import { getUserAndTokenFromCookie, setCookie } from '../../scripts/handleCookies';
+import { updateItems, getItemsById } from '../../scripts/apis';
+import { errorNotification, successNotification } from '../../scripts/notifications';
 import '../styles/views/login.css';
+import { ToastContainer } from 'react-toastify';
 
 function UserSettings({ isLogged }) {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ function UserSettings({ isLogged }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const data = await getUser('accounts', isLogged?.user ? isLogged?.user : user.user);
+      const data = await getItemsById('accounts', isLogged?.id);
       setUser(data);
       let code = data?.cellPhone?.slice(0, 3);
       setUser((prev) => ({ ...prev, cellPhone: data?.cellPhone?.slice(3) }));
@@ -40,21 +41,49 @@ function UserSettings({ isLogged }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let phone = e.target.codigo.value + e.target.cellPhone.value;
+  
+    const phone = e.target.codigo.value + e.target.cellPhone.value;
+  
+    // Validaciones manuales
+    if (!/^\S.{0,19}$/.test(e.target.name.value)) {
+      errorNotification('El nombre es obligatorio y debe tener máximo 20 caracteres.');
+      return;
+    }
+    if (!/^\S.{0,29}$/.test(e.target.lastName.value)) {
+      errorNotification('El apellido es obligatorio y debe tener máximo 30 caracteres.');
+      return;
+    }
+    if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(e.target.email.value)) {
+      errorNotification('Debes ingresar un email válido.');
+      return;
+    }
+    if (!/^\d{10}$/.test(e.target.cellPhone.value)) {
+      errorNotification('El número de celular debe tener exactamente 10 dígitos.');
+      return;
+    }
+    if (!/^\S{3,12}$/.test(e.target.user.value)) {
+      errorNotification('El usuario debe tener entre 3 y 12 caracteres, sin espacios.');
+      return;
+    }
+  
     const data = {
       name: sanitizeStrings(e.target.name.value, 2),
       lastName: sanitizeStrings(e.target.lastName.value, 2),
       user: sanitizeStrings(e.target.user.value, 2),
-      password: sanitizeStrings(e.target.password.value, 1),
-      confirmPassword: sanitizeStrings(e.target.confirmPassword.value, 1),
       email: sanitizeStrings(e.target.email.value, 4),
       cellPhone: sanitizeStrings(phone, 3),
       type: true,
     };
-    await updateItems('accounts', user._id, data);
-    window.location.reload();
+  
+    try {
+      await updateItems('accounts', isLogged.id, data);
+      successNotification('Datos actualizados');
+    } catch (error) {
+      errorNotification('Ups, ¡Algo salió mal!');
+    }
   };
-
+  
+  
   return (
     <main className="login-main">
       <form className="login-form" id="loginForm" autoComplete="off" onSubmit={handleSubmit}>
@@ -91,10 +120,11 @@ function UserSettings({ isLogged }) {
             placeholder="Email"
             title="Ingresa un correo electrónico válido"
             value={user.email}
+            required
             onChange={handleChange}
           />
           <div>
-            <select name="codigo" defaultValue={user.code} title="Selecciona tu código de país">
+            <select name="codigo" defaultValue={user.code} title="Selecciona tu código de país" required>
               <option value={user.code}>{user.code}</option>
               <option value="+52">🇲🇽 +52</option>
               <option value="+01">🇺🇸 +1</option>
@@ -108,14 +138,12 @@ function UserSettings({ isLogged }) {
               <option value="+61">🇦🇺 +61</option>
             </select>
             <input
-              type="number"
+              type="text"
               name="cellPhone"
               placeholder="Número Celular"
-              title="Debe ser un número de 10 dígitos"
-              pattern="[0-9]{10}"
+              pattern="\d{10}"
               maxLength="10"
               required
-              autoComplete="mobile tel"
               value={user.cellPhone}
               onChange={handleChange}
               style={{ width: "60%" }}
@@ -128,7 +156,8 @@ function UserSettings({ isLogged }) {
               placeholder="Usuario"
               title="Ingresa tu nombre de usuario (máximo 12 caracteres, no puede estar vacío)"
               maxLength={12}
-              pattern=".*\S.*"
+              min={3}
+              pattern="^\S+$*"
               required
               value={user.user ? user.user : ''}
               onChange={handleChange}
@@ -155,6 +184,7 @@ function UserSettings({ isLogged }) {
           <button type="button" onClick={() => navigate(-1)}>Cancelar</button>
         </div>
       </form>
+      <ToastContainer/>
     </main>
   );
 }

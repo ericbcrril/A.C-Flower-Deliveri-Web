@@ -7,6 +7,7 @@ import './App.css';
 import { validateToken, getItemsById } from './scripts/apis';
 import { deleteAllCookies } from './scripts/handleCookies';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ToastContainer } from 'react-toastify';
 // Views Usuario
 import Home from './user/views/home';
 import Menu from './user/views/menu';

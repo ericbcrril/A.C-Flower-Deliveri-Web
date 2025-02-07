@@ -4,7 +4,6 @@ import '../styles/html-grandiant.css';
 import NavBar from "../components/misc/navbar";
 import { createItems, getItems, deleteItems, updateItems } from '../../scripts/apis';
 import sanitizeString from '../../scripts/sanitizeStrings';
-import { image } from 'framer-motion/client';
 import { TiPlus } from "react-icons/ti";
 import { ToastContainer } from 'react-toastify';
 import { infoNotification, errorNotification, successNotification } from '../../scripts/notifications';
