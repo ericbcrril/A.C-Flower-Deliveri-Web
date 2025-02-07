@@ -12,16 +12,20 @@ function UserSettings({ isLogged }) {
     name: '',
     lastName: '',
     email: '',
+    code: '',
     cellPhone: '',
     user: '',
   });
 
   useEffect(() => {
     const fetchUser = async () => {
-      const data = await getUser('accounts', isLogged?.user ? isLogged?.user:user.user);
+      const data = await getUser('accounts', isLogged?.user ? isLogged?.user : user.user);
       setUser(data);
+      let code = data?.cellPhone?.slice(0, 3);
+      setUser((prev) => ({ ...prev, cellPhone: data?.cellPhone?.slice(3) }));
+      setUser((prev) => ({ ...prev, code: code }));
     };
-    if(user.name === ''){fetchUser();}
+    if (user.name === '') { fetchUser(); }
   }, [user]);
 
   const handleChange = (e) => {
@@ -31,23 +35,29 @@ function UserSettings({ isLogged }) {
 
   if (!isLogged.login) {
     navigate('/Menu');
-    return null; // Evitar renderizado adicional
+    return null;
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await updateItems('accounts', user._id, user);
+    let phone = e.target.codigo.value + e.target.cellPhone.value;
+    const data = {
+      name: sanitizeStrings(e.target.name.value, 2),
+      lastName: sanitizeStrings(e.target.lastName.value, 2),
+      user: sanitizeStrings(e.target.user.value, 2),
+      password: sanitizeStrings(e.target.password.value, 1),
+      confirmPassword: sanitizeStrings(e.target.confirmPassword.value, 1),
+      email: sanitizeStrings(e.target.email.value, 4),
+      cellPhone: sanitizeStrings(phone, 3),
+      type: true,
+    };
+    await updateItems('accounts', user._id, data);
     window.location.reload();
   };
 
   return (
     <main className="login-main">
-      <form
-        className="login-form"
-        id="loginForm"
-        autoComplete="off"
-        onSubmit={handleSubmit}
-      >
+      <form className="login-form" id="loginForm" autoComplete="off" onSubmit={handleSubmit}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <h3 style={{ color: 'white', margin: 0 }}>Datos Personales</h3>
           <hr style={{ margin: 0 }} />
@@ -55,6 +65,7 @@ function UserSettings({ isLogged }) {
             type="text"
             name="name"
             placeholder="Nombre"
+            title="Ingresa tu nombre (máximo 20 caracteres, no puede estar vacío)"
             maxLength={20}
             pattern=".*\S.*"
             required
@@ -65,6 +76,7 @@ function UserSettings({ isLogged }) {
             type="text"
             name="lastName"
             placeholder="Apellido"
+            title="Ingresa tu apellido (máximo 30 caracteres, no puede estar vacío)"
             maxLength={30}
             pattern=".*\S.*"
             required
@@ -77,13 +89,15 @@ function UserSettings({ isLogged }) {
             type="email"
             name="email"
             placeholder="Email"
+            title="Ingresa un correo electrónico válido"
             value={user.email}
             onChange={handleChange}
           />
           <div>
-            <select name="codigo" defaultValue="+52">
+            <select name="codigo" defaultValue={user.code} title="Selecciona tu código de país">
+              <option value={user.code}>{user.code}</option>
               <option value="+52">🇲🇽 +52</option>
-              <option value="+1">🇺🇸 +1</option>
+              <option value="+01">🇺🇸 +1</option>
               <option value="+44">🇬🇧 +44</option>
               <option value="+33">🇫🇷 +33</option>
               <option value="+34">🇪🇸 +34</option>
@@ -94,13 +108,17 @@ function UserSettings({ isLogged }) {
               <option value="+61">🇦🇺 +61</option>
             </select>
             <input
-              type="tel"
+              type="number"
               name="cellPhone"
               placeholder="Número Celular"
-              pattern=".*\S*[0-9]{10}"
-              style={{ width: '60%' }}
+              title="Debe ser un número de 10 dígitos"
+              pattern="[0-9]{10}"
+              maxLength="10"
+              required
+              autoComplete="mobile tel"
               value={user.cellPhone}
               onChange={handleChange}
+              style={{ width: "60%" }}
             />
             <h3 style={{ color: 'white', margin: 0 }}>Cuenta</h3>
             <hr />
@@ -108,13 +126,14 @@ function UserSettings({ isLogged }) {
               type="text"
               name="user"
               placeholder="Usuario"
+              title="Ingresa tu nombre de usuario (máximo 12 caracteres, no puede estar vacío)"
               maxLength={12}
               pattern=".*\S.*"
               required
-              value={user.user ? user.user:''}
+              value={user.user ? user.user : ''}
               onChange={handleChange}
             />
-            <h5 style={{ color: 'white', margin: 0 }}>Cambiar Contraseña</h5>
+            {/*<h5 style={{ color: 'white', margin: 0 }}>Cambiar Contraseña</h5>
             <hr />
             <input
               type="password"
@@ -129,13 +148,11 @@ function UserSettings({ isLogged }) {
               placeholder="Nueva Contraseña"
               minLength={8}
               pattern=".*\S.*"
-            />
+            />*/}
           </div>
           <br />
           <button type="submit">Guardar Cambios</button>
-          <button type="button" onClick={() => navigate(-1)}>
-            Cancelar
-          </button>
+          <button type="button" onClick={() => navigate(-1)}>Cancelar</button>
         </div>
       </form>
     </main>

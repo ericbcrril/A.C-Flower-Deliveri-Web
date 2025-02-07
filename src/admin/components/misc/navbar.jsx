@@ -1,25 +1,23 @@
 import '../../styles/components/nav.css';
-import { FaUserCircle, FaShoppingCart } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { LuSquareMenu } from "react-icons/lu";
+import { TfiMenuAlt } from "react-icons/tfi";
 import { useState } from 'react';
 import NavMenu from './navMenu';
-import ShoppingCart from './shoppingCart';
 import AccountDetails from './accountDetails';
-import LogginNavbar from './logginNavbar';
+import { IoClose } from 'react-icons/io5';
 
 
 
 function NavBar({isLogged}){
     const [navM, setNM] = useState(false);
-    const [shopC, setSC] = useState(false);
     const [acc, setAcc] = useState(false);
     const [logg, setLogg] = useState(false);
 
     function resetViews(){
         setNM(false);
         setAcc(false);
-        setSC(false);
         setLogg(false);
     }
     function handleClickNav(click){
@@ -28,10 +26,6 @@ function NavBar({isLogged}){
                 case 'NavMenu':
                     resetViews(); 
                     setNM(!navM);
-                break
-                case 'ShoppingCart':
-                    resetViews(); 
-                    setSC(!shopC);
                 break
                 case 'Account':
                     resetViews(); 
@@ -51,7 +45,13 @@ function NavBar({isLogged}){
     return(
         <nav>
             <div className='sec0'>
-                <LuSquareMenu className='icon' onClick={ ()=> handleClickNav('NavMenu') }/>
+                <div className='back-menu-icon'>
+                    {!navM ?
+                        <TfiMenuAlt className='menu-icon' onClick={ ()=> handleClickNav('NavMenu') }/>
+                        :
+                        <IoClose className='menu-icon' onClick={ ()=> setNM(false) }/>
+                    }
+                </div>
             </div>
             <div className='sec1'>
                 <div className='icons-container' onClick={ ()=> handleClickNav('Account') }>
@@ -61,7 +61,6 @@ function NavBar({isLogged}){
             </div>
             <NavMenu visible={navM} isLogged={isLogged}/>
             <AccountDetails visible={acc} isLogged={isLogged}/>
-            <LogginNavbar visible={logg}/>
         </nav>
     );
 }

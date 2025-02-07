@@ -5,7 +5,7 @@
     justify-content: space-between;
     background-color: #01050d;
     border-radius: 35px;
-    width: 100px;
+    width: fit-content;
     padding: 5px 5px 5px 5px;
     transition: scale .2s, background-color .3s;
 }
@@ -25,7 +25,8 @@
     all: unset;
     color: white;
     font-size: small;
-    margin-right: 15px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .btnAddCart:hover{

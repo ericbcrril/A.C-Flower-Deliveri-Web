@@ -26,7 +26,7 @@ export function setCookie(name, value, days = 7, path = '/', secure = false, sam
     }
 
     document.cookie = cookieString;
-    console.log(`Cookie "${name}" guardada.`);
+    //console.log(`Cookie "${name}" guardada.`);
 }
 
 export function setCookieHttpOnly(name, value, days = 7, path = '/', secure = false, sameSite = 'Lax') {
@@ -39,7 +39,7 @@ export function setCookieHttpOnly(name, value, days = 7, path = '/', secure = fa
     }
 
     document.cookie = cookieString;
-    console.log(`Cookie httponly "${name}" guardada.`, cookieString);
+    //console.log(`Cookie httponly "${name}" guardada.`, cookieString);
 }
 
 
@@ -57,7 +57,7 @@ export function getCookie(name) {
 // Función para eliminar una cookie
 export function deleteCookie(name, path = '/') {
     document.cookie = `${name}=; expires=Thu, 01 Jan 2000 00:00:00 UTC; path=${path};`;
-    console.log(`Cookie "${name}" eliminada.`);
+    //console.log(`Cookie "${name}" eliminada.`);
 }
 // Función para eliminar todas las cookies
 export function deleteAllCookies() {
@@ -94,7 +94,7 @@ export function getUserAndTokenFromCookie() {
             return null; // Devuelve valores predeterminados si no se encuentra el token
         }
     } else {
-        console.log('Cookie no encontrada.');
+        //console.log('Cookie no encontrada.');
         return null; // Devuelve valores predeterminados si no se encuentra la cookie
     }
 }

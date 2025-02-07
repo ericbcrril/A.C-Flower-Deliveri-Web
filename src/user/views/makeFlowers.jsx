@@ -1,56 +1,38 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import NavBar from "../components/misc/navbar";
 import "../styles/views/makeFlowers.css";
 import { getItems } from "../../scripts/apis";
 import sanitizeString from '../../scripts/sanitizeStrings';
-import guadalajaraJSON from '../../data/Guadalajara.json';
 import zapopanJSON from '../../data/Zapopan.json';
 import { loadStripe } from "@stripe/stripe-js";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL, STRIPE_PUBLIC_KEY } from '../../scripts/response';
 
-const stripePromise = loadStripe('pk_test_51Qh4RcJRYDnPPqdIgKGPqbpmZYspZ82Gt4UfkFTwwMNv6GgyjFWq0kRbBmZYYEhn5eHTtFo2i1OPXlqpCiNnhHVP00DYwHgPDE'); // Reemplaza con tu clave pública de Stripe
+const stripePromise = loadStripe(STRIPE_PUBLIC_KEY); // Reemplaza con tu clave pública de Stripe
 //const imgFlower = require('/iconsFlowerTool/flowers/0.webp');
 
 function MakeFlowers({ isLogged }) {
 
 // Modelo de datos
-const [items, setItems] = useState([
-  { image: '/iconsFlowerTool/flowers/0.webp',
-    _id: '0', name: 'flor0', price: 12, type: 'flower' },
-  { image: '/iconsFlowerTool/flowers/4.webp',
-    _id: '0', name: 'flor0', price: 12, type: 'flower' },
-  { image: '/iconsFlowerTool/flowers/1.webp',
-    _id: '0', name: 'flor0', price: 12, type: 'flower' },
- { image: '/iconsFlowerTool/flowers/2.webp',
-    _id: '1', name: 'flor1', price: 15, type: 'flower' },
- { image: '/iconsFlowerTool/flowers/3.webp',
-    _id: '2', name: 'flor2', price: 20, type: 'flower' },
- { image: '/iconsFlowerTool/accessories/2.webp',
-    _id: '3', name: 'accessory1', price: 5, type: 'accessory' },
- { image: '/iconsFlowerTool/accessories/0.webp', 
-    _id: '4', name: 'accessory2', price: 7, type: 'accessory' },
- { image: '/iconsFlowerTool/accessories/3.webp', 
-    _id: '4', name: 'accessory2', price: 7, type: 'accessory' },
- { image: '/iconsFlowerTool/accessories/1.webp', 
-    _id: '4', name: 'accessory2', price: 7, type: 'accessory' },
- { image: '/iconsFlowerTool/flowers/0.webp',
-    _id: '5', name: 'foliage1', price: 10, type: 'foliage' },
-]);
+const [items, setItems] = useState([]);
 
 
   // Manejar el evento de redimensionamiento de la ventana
   useEffect(() => {
-    const handleResize = () => setWinW(window.innerWidth);
-    window.addEventListener('resize', handleResize);
+    const handleResizeW = () => setWinW(window.innerWidth);
+    const handleResizeH = () => setWinW(window.innerHeight);
+    window.addEventListener('resize', handleResizeW);
+    window.addEventListener('resize', handleResizeH);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', handleResizeW);
+      window.removeEventListener('resize', handleResizeH);
     };
   }, []);
   useEffect(() => {
     const getItemsBd = async () => {
       try {
         let data = await getItems('items');
-        //setItems(data);
+        setItems(data);
       } catch (error) {
         console.log(error);
       }
@@ -72,6 +54,7 @@ const [items, setItems] = useState([
   // Calcular posiciones de flores en función del tamaño del ramo
 
   const [winW, setWinW] = useState(window.innerWidth);
+  const [winH, setWinH] = useState(window.innerHeight);
 
   const flowerPositions = useMemo(() => {
     const positions = [];
@@ -93,10 +76,18 @@ const [items, setItems] = useState([
     let value1 = 11;
     let value2 = 8;
 
-    if(winW < 450){
+    if(winW > 450 && winW < 1024 && winH > 720){//Tablets Port
+       value0 = 9.5; 
+       value1 = 5.8;
+       value2 = 4;
+    }    
+    if(winW < 450){//Movil Port
        value0 = 6.5;
        value1 = 4;
        value2 = 2.8;
+    }    
+    if(winH < 450 && winW > 650 && winW < 950){//Movil Land
+       
     }    
 
     if (bouquetSize === 10) createCircle(9, winW / value0);
@@ -110,7 +101,7 @@ const [items, setItems] = useState([
     }
 
     return positions;
-  }, [bouquetSize, winW]);
+  }, [bouquetSize, winW, winH]);
 
   // #region Drag and Drop
   const handleDrop = (e, type, index) => {
@@ -126,7 +117,7 @@ const [items, setItems] = useState([
   
     // Validar que el tipo del elemento coincida con el tipo esperado del contenedor
     if (droppedItem.type !== type) {
-      alert(`No se puede colocar un ${droppedItem.type} en un contenedor ${type}.`);
+      openDialogEditor();
       return;
     }
   
@@ -196,7 +187,7 @@ const handleDragStart = (e, item) => {
   const handleContainerTap = (type, index) => {
     if (!selectedItem) return; // Si no hay ítem seleccionado, no hacer nada
     if (selectedItem.type !== type) {
-      alert(`No se puede colocar un ${selectedItem.type} en un contenedor de ${type}.`);
+      openDialogEditor('❌ No puedes colocar ese elemento aqui ❌');
       return;
     }
   
@@ -218,35 +209,36 @@ const handleDragStart = (e, item) => {
   };
   
   
-  let [bouquet, setBouquet] = useState([]);
   function genBouquet(){
-      let data = [...flowers, ...accessories, ...foliage].filter(item => item !== null);
+      let bouquet = [...flowers].filter(item => item !== null);
       let items = [...accessories, ...foliage].filter(item => item !== null);
-      // Guardar
-      localStorage.setItem('bouquet', JSON.stringify(flowers));
-      localStorage.setItem('bouquetItems', JSON.stringify(items));
-      setBouquet(data);
-      console.log(data);
-      return data;
+      let data = [...flowers, ...accessories, ...foliage].filter(item => item !== null);
+      return { bouquet: bouquet, items: items, data: data};
   }
 
   // #region Formulario de orden
 
-  const [minTime, setMinTime] = useState('08:00');
-  const [orderFromVisible, setOrderFormVisible] = useState(false);
-  const [localities, setLocalities] = useState([]); // Estado para las localidades
+  const [minTime, setMinTime] = useState('11:00');
+  const dialogOrderForm = useRef(null);
+  const dialogEditor = useRef(null);
+  const [dialogMessage, setDialogMessage] = useState('');
+  const [localities, setLocalities] = useState(zapopanJSON); // Estado para las localidades
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0];
 
   async function handleClickPay(event) {
     event.preventDefault();
-    let bouquet = await genBouquet();
+    let data = await genBouquet();
+    let totalBouquet = data.data;
+    let bouquet = data.bouquet;
+    let items = data.items;
     let orderData = {
       userId: isLogged.id,
       receiver: sanitizeString(event.target.receiverName.value, 2),
       date: event.target.date.value,
       time: event.target.time.value,
       bouquet: bouquet,
+      items: items,
       address: {
         address: sanitizeString(event.target.address.value, 2),
         cp: sanitizeString(event.target.cp.value, 2),
@@ -255,31 +247,29 @@ const handleDragStart = (e, item) => {
       },
       letter: sanitizeString(event.target.letter.value, 1)
     }
-    console.log('Enviando...', orderData);
+    //console.log('Enviando...', orderData);
     try {
-      const stripe = await stripePromise;
-
-      const response = await fetch('http://localhost:5000/api/items/checkout', {
+      localStorage.setItem('orderData', JSON.stringify(orderData));
+      const response = await fetch(`${BASE_URL}/stripe/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ orderData }),
+        body: JSON.stringify({ items: totalBouquet }),
       });
 
       const { url } = await response.json();
       window.location.href = url;
     } catch (error) {
-      navigate('/handlePay?state=false');
+      navigate('/handlePay');
       console.error('Error al iniciar el pago:', error);
     }
   }
 
-
   const handleMunicipalityChange = (event) => {
     const municipality = event.target.value;
-    if (municipality === 'guadalajara') {
-      setLocalities(guadalajaraJSON);
+    if (municipality === 'zapopan') {
+      setLocalities(zapopanJSON);
     } else if (municipality === 'zapopan') {
       setLocalities(zapopanJSON);
     } else {
@@ -309,9 +299,27 @@ const handleDragStart = (e, item) => {
       const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
       setMinTime(formattedTime);
     } else {
-      setMinTime('08:00'); // Rango mínimo predeterminado
+      setMinTime('11:00'); // Rango mínimo predeterminado
     }
   };
+
+  async function openDialog() {
+    let flowersNow = await genBouquet();
+      dialogOrderForm.current.showModal();
+}
+
+function closeDialog() {
+    dialogOrderForm.current.close();
+}
+
+function openDialogEditor(message) {
+    setDialogMessage(message);
+    dialogEditor.current.showModal();
+}
+
+function closeDialogEditor() {
+    dialogEditor.current.close();
+}
   
 
   return (
@@ -335,7 +343,7 @@ const handleDragStart = (e, item) => {
               <img
                 src={accessory.image}
                 alt={accessory.name}
-                title={`${accessory.name} $${accessory.price}`}
+                title={`${accessory.name} $${accessory.price} MXN`}
                 style={{ width: "50px", height: "50px" }}
               />
             </div>
@@ -354,7 +362,7 @@ const handleDragStart = (e, item) => {
               <img
                 src={foliage.image}
                 alt={foliage.name}
-                title={`${foliage.name} $${foliage.price}`}
+                title={`${foliage.name} $${foliage.price} MXN`}
                 style={{ width: "50px", height: "50px" }}
               />
             </div>
@@ -370,10 +378,11 @@ const handleDragStart = (e, item) => {
                 <option value={33}>Ramo de 33</option>
               </select>
               <p>Costo Total: ${calculateTotalCost()}</p>
-              <button onClick={() => setOrderFormVisible(true)}>Continuar</button>
+              <button onClick={() => isLogged.login ? openDialog() : navigate('/Login')}>Continuar</button>
           </div>
           <div className="bottom-section-div1">
             {flowerOptions?.map(flower => (
+              <div className="flower-and-name-container">
               <div
                 key={flower._id}
                 className={`element-box ${selectedItem === flower ? "selected" : ""}`}
@@ -384,9 +393,11 @@ const handleDragStart = (e, item) => {
                 <img
                   src={flower.image}
                   alt={flower.name}
-                  title={`${flower.name} $${flower.price}`}
+                  title={`${flower.name} $${flower.price} MXN`}
                   style={{ width: "50px", height: "50px" }}
                 />
+              </div>
+              <p>{flower.name}</p>
               </div>
             ))}
           </div>
@@ -476,45 +487,92 @@ const handleDragStart = (e, item) => {
             </div>
           </div>
 
-          <section className='order-details-section' style={{ display: orderFromVisible ? 'flex' : 'none' }}>
-        <h4 style={{ color: 'white' }}>Detalles de entrega</h4>
-        <form onSubmit={handleClickPay}>
-          <input type="number" name='cp' placeholder='CP' />
-          <div>
-            <select name="municipality" onChange={handleMunicipalityChange}>
-              <option value="" defaultValue={''}>Selecciona una localidad</option>
-              <option value="guadalajara">Guadalajara</option>
-              <option value="zapopan">Zapopan</option>
-            </select>
-            <select name="locality">
-              <option value="" defaultValue={''}>Selecciona una localidad</option>
-              {localities?.map((locality, index) => (
-                <option key={index} value={locality.cp}>
-                  {locality.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
-          <input type="text" name="address" placeholder='Direccion' />
-          <hr />
-          <input type="text" name="receiverName" placeholder='Destinatario' required />
-          <div>
-            <input required
-              type="date"
-              name="date"
-              id="dateInput"
-              min={today}
-              onChange={handleDateChange}
-            />
-            <input type="time" name="time" min={minTime} max="22:00" required />
-          </div>
-          <textarea name="letter" placeholder='Carta (Opcional)' rows={3}></textarea>
-          <button type='submit' style={{ width: '100%' }}>Pagar</button>
-          <button onClick={() => setOrderFormVisible(false)} style={{ width: '100%' }}>Cancelar</button>
-        </form>
-      </section>
+          <dialog className="order-details-section" ref={dialogOrderForm}>
+            <h4 style={{ color: "white", textAlign: "center" }}>Detalles de entrega</h4>
+
+            <form onSubmit={handleClickPay} className="order-form">
+              {/* Sección de dirección */}
+              <div className="form-section">
+                <input type="number" name="cp" placeholder="CP" maxLength={5} minLength={5} title='Ingresa un CP valido' required />
+              </div>
+
+              <div className="form-section" style={{display: "flex", flexDirection: "row", maxWidth: '95%'}}>
+                <select name="municipality" onChange={handleMunicipalityChange} required>
+                  <option value="zapopan">Zapopan</option>
+                </select>
+
+                <select name="locality" required>
+                  <option value="">Selecciona una localidad</option>
+                  {localities.map((locality, index) => (
+                    <option key={index} value={locality.cp}>
+                      {locality.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-section">
+                <input type="text" name="address" placeholder="Dirección" maxLength={60} title='Limite de 60 caracteres' required />
+              </div>
+
+              <hr />
+
+              {/* Sección de destinatario */}
+              <div className="form-section">
+                <label>Nombre del destinatario</label>
+                <input type="text" name="receiverName" placeholder="Destinatario" maxLength={20} title='Limite de 20 caracteres' required />
+              </div>
+
+              {/* Sección de fecha y hora */}
+              <div className="form-section">
+                <label>Fecha de entrega</label>
+                  <div style={{display: "flex", flexDirection: "row", maxWidth: '95%'}}>
+                    <input
+                    type="date"
+                    name="date"
+                    min={today}
+                    onChange={handleDateChange}
+                    title='¿Que dia necesitas el pedido?'
+                    required
+                    style={{ color: "black" }}
+                    />
+                    <input
+                      type="time"
+                      name="time"
+                      min={minTime}
+                      max="23:00"
+                      title='Horario de 11:00 am - 11:00 pm'
+                      required
+                      style={{ color: "black" }}
+                    />
+                </div>
+              </div>
+
+              {/* Sección de carta opcional */}
+              <div className="form-section">
+                <label>Mensaje (Opcional)</label>
+                <textarea name="letter" placeholder="Carta (Opcional)" rows={3} maxLength={250} title='Limite de 250 caracteres'></textarea>
+              </div>
+
+              {/* Botones */}
+              <div className="form-buttons">
+                <button type="submit" className="btn-pay">Pagar</button>
+                <button type="button" onClick={closeDialog} className="btn-cancel">Cancelar</button>
+              </div>
+            </form>
+          </dialog>
         </section>
       </main>
+
+
+      <dialog ref={dialogEditor}>
+        <section>
+          <p>{dialogMessage}</p>
+          <button onClick={closeDialogEditor}>Ok</button>
+        </section>
+      </dialog>
+
+
     </>
   );
 }

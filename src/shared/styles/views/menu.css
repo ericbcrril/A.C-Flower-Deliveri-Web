@@ -1,4 +1,4 @@
-main{
+.menu-main{
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -25,11 +25,68 @@ section{
     color: #191919;
 }
 
+.help-section{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 400px;
+    width: fit-content;
+    padding: 20px;
+    bottom: 0; left: 50px;
+    background-color: white;
+    border-radius: 20px;
+    border: .5px solid rgba(0, 0, 0, .5);
+    white-space: nowrap;
+    animation: Apeardown .5s forwards;
+}
+
+.close-help-sect{
+    position: absolute;
+    left: 0; top: 0;
+    font-size: x-large;
+    cursor: pointer;
+}
+
+.help-section div{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.help-section a{
+    color: blue;
+}
+
+.help-section h2{
+    margin: 5px;
+}
+
+.social-icons{
+    display: flex;
+    flex-direction: row !important;
+    font-size: xx-large;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.btn-help{
+    position: fixed;
+    bottom: 0; left: 0;
+    font-size: xx-large;
+    background-color: white;
+    border-radius: 50%;
+    z-index: 8;
+    cursor: pointer;
+}
+
+
 /*Tablet portrait*/
 @media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
-    main{
+    .menu-main{
         height: 100vh;
-        justify-content: start;
+        justify-content: flex-start !important;
         overflow: auto;
     }
     
@@ -42,7 +99,7 @@ section{
     }
 
     .btn-subs{
-        position: absolute;
+        position: fixed;
         bottom: 0;
         right: 0;
         padding: 10px;
@@ -52,9 +109,9 @@ section{
 
 /*Mobile Portrait*/
 @media (max-width: 450px) {
-    main{
+    .menu-main{
         height: 100vh;
-        justify-content: start;
+        justify-content: flex-start !important;
         overflow: auto;
     }
     
@@ -67,7 +124,7 @@ section{
     }
 
     .btn-subs{
-        position: absolute;
+        position: fixed;
         bottom: 0;
         right: 0;
         padding: 10px;
@@ -77,7 +134,7 @@ section{
 
 /*Mobile Landscape*/
 @media (max-height: 450px) and (min-width: 650px) and (max-width: 950px) {
-    main{
+    .menu-main{
         height: 100vh;
         justify-content: start;
         overflow: auto;
@@ -105,7 +162,7 @@ section{
     }
 
     .btn-subs{
-        position: absolute;
+        position: fixed;
         bottom: 0;
         right: 0;
         padding: 10px;

@@ -1,22 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/components/navMenus.css';
 import { MdCancel } from "react-icons/md";
 import { getCookie, setCookie } from '../../../scripts/handleCookies';
 import { loadStripe } from '@stripe/stripe-js';
 import sanitizeString from '../../../scripts/sanitizeStrings';
-import guadalajaraJSON from '../../../data/Guadalajara.json';
 import zapopanJSON from '../../../data/Zapopan.json';
+import { BASE_URL, STRIPE_PUBLIC_KEY } from '../../../scripts/response';
+import React from 'react';
 
-const stripePromise = loadStripe('pk_test_51Qh4RcJRYDnPPqdIgKGPqbpmZYspZ82Gt4UfkFTwwMNv6GgyjFWq0kRbBmZYYEhn5eHTtFo2i1OPXlqpCiNnhHVP00DYwHgPDE'); // Reemplaza con tu clave pública de Stripe
+
+const stripePromise = loadStripe(STRIPE_PUBLIC_KEY); // Reemplaza con tu clave pública de Stripe
 
 function ShoppingCart({ visible, isLogged }) {
-  const [orderFromVisible, setOrderFormVisible] = useState(false);
+  const dialogOrderForm = useRef(null);
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [lastCartValue, setLastCartValue] = useState('');
-  const [minTime, setMinTime] = useState('08:00');
-  const [localities, setLocalities] = useState([]); // Estado para las localidades
+  const [minTime, setMinTime] = useState('11:00');
+  const [localities, setLocalities] = useState(zapopanJSON); // Estado para las localidades
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,10 +39,18 @@ function ShoppingCart({ visible, isLogged }) {
     return () => clearInterval(intervalId); // Limpia el intervalo al desmontar
   }, [lastCartValue, items]);
 
+  function openDialog() {
+      dialogOrderForm.current.showModal();
+  }
+  
+  function closeDialog() {
+      dialogOrderForm.current.close();
+  }
+
   const handleMunicipalityChange = (event) => {
     const municipality = event.target.value;
-    if (municipality === 'guadalajara') {
-      setLocalities(guadalajaraJSON);
+    if (municipality === 'zapopan') {
+      setLocalities(zapopanJSON);
     } else if (municipality === 'zapopan') {
       setLocalities(zapopanJSON);
     } else {
@@ -70,7 +80,7 @@ function ShoppingCart({ visible, isLogged }) {
       const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
       setMinTime(formattedTime);
     } else {
-      setMinTime('08:00'); // Rango mínimo predeterminado
+      setMinTime('11:00'); // Rango mínimo predeterminado
     }
   };
 
@@ -98,16 +108,15 @@ function ShoppingCart({ visible, isLogged }) {
       },
       letter: sanitizeString(event.target.letter.value, 1)
     }
-    console.log(orderData);
+    //console.log(orderData);
     try {
-      const stripe = await stripePromise;
-
-      const response = await fetch('http://localhost:5000/api/bouquets/checkout', {
+      localStorage.setItem('orderData', JSON.stringify(orderData));
+      const response = await fetch(`${BASE_URL}/stripe/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ items, orderData }),
+        body: JSON.stringify({ items: items }),
       });
 
       const { url } = await response.json();
@@ -142,45 +151,83 @@ function ShoppingCart({ visible, isLogged }) {
       </div>
 
       <button style={{ display: items.length ? '' : 'none' }}
-        onClick={() => isLogged.login ? setOrderFormVisible(true) : navigate('/Login')}>Continuar</button>
+        onClick={() => isLogged.login ? openDialog() : navigate('/Login')}>Continuar</button>
 
-      <section className='order-details-section' style={{ display: orderFromVisible ? 'flex' : 'none' }}>
-        <h4 style={{ color: 'white' }}>Detalles de entrega</h4>
-        <form onSubmit={handleClickPay}>
-          <input type="number" name='cp' placeholder='CP' />
-          <div>
-            <select name="municipality" onChange={handleMunicipalityChange}>
-              <option value="" defaultValue={''}>Selecciona una localidad</option>
-              <option value="guadalajara">Guadalajara</option>
-              <option value="zapopan">Zapopan</option>
-            </select>
-            <select name="locality">
-              <option value="" defaultValue={''}>Selecciona una localidad</option>
-              {localities.map((locality, index) => (
-                <option key={index} value={locality.cp}>
-                  {locality.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
-          <input type="text" name="address" placeholder='Direccion' />
-          <hr />
-          <input type="text" name="receiverName" placeholder='Destinatario' required />
-          <div>
-            <input required
-              type="date"
-              name="date"
-              id="dateInput"
-              min={today}
-              onChange={handleDateChange}
-            />
-            <input type="time" name="time" min={minTime} max="22:00" required />
-          </div>
-          <textarea name="letter" placeholder='Carta (Opcional)' rows={3}></textarea>
-          <button type='submit' style={{ width: '100%' }}>Pagar</button>
-          <button onClick={() => setOrderFormVisible(false)} style={{ width: '100%' }}>Cancelar</button>
-        </form>
-      </section>
+          <dialog className="order-details-section" ref={dialogOrderForm}>
+            <h4 style={{ color: "white", textAlign: "center" }}>Detalles de entrega</h4>
+
+            <form onSubmit={handleClickPay} className="order-form">
+              {/* Sección de dirección */}
+              <div className="form-section">
+                <input type="number" name="cp" placeholder="CP" maxLength={5} minLength={5} title='Ingresa un CP valido' required />
+              </div>
+
+              <div className="form-section" style={{display: "flex", flexDirection: "row", maxWidth: '95%'}}>
+                <select name="municipality" onChange={handleMunicipalityChange} required>
+                  <option value="zapopan">Zapopan</option>
+                </select>
+
+                <select name="locality" required>
+                  <option value="">Selecciona una localidad</option>
+                  {localities.map((locality, index) => (
+                    <option key={index} value={locality.cp}>
+                      {locality.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-section">
+                <input type="text" name="address" placeholder="Dirección" maxLength={60} title='Limite de 60 caracteres' required />
+              </div>
+
+              <hr />
+
+              {/* Sección de destinatario */}
+              <div className="form-section">
+                <label>Nombre del destinatario</label>
+                <input type="text" name="receiverName" placeholder="Destinatario" maxLength={20} title='Limite de 20 caracteres' required />
+              </div>
+
+              {/* Sección de fecha y hora */}
+              <div className="form-section">
+                <label>Fecha de entrega</label>
+                  <div style={{display: "flex", flexDirection: "row", maxWidth: '95%'}}>
+                    <input
+                    type="date"
+                    name="date"
+                    min={today}
+                    onChange={handleDateChange}
+                    title='¿Que dia necesitas el pedido?'
+                    required
+                    style={{ color: "black" }}
+                    />
+                    <input
+                      type="time"
+                      name="time"
+                      min={minTime}
+                      max="23:00"
+                      title='Horario de 11:00 am - 11:00 pm'
+                      required
+                      style={{ color: "black" }}
+                    />
+                </div>
+              </div>
+
+              {/* Sección de carta opcional */}
+              <div className="form-section">
+                <label>Mensaje (Opcional)</label>
+                <textarea name="letter" placeholder="Carta (Opcional)" rows={3} maxLength={250} title='Limite de 250 caracteres'></textarea>
+              </div>
+
+              {/* Botones */}
+              <div className="form-buttons">
+                <button type="submit" className="btn-pay">Pagar</button>
+                <button type="button" onClick={closeDialog} className="btn-cancel">Cancelar</button>
+              </div>
+            </form>
+          </dialog>
+
     </section>
   );
 }

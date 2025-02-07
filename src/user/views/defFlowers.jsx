@@ -3,7 +3,7 @@ import NavBar from "../components/misc/navbar";
 import OptionRect from "../components/menu/optionRect";
 import BtnAddCart from "../components/menu/btnAddCart";
 import { getItems } from '../../scripts/apis';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function DefFlowers({isLogged}) {
     const [bouquets, setBouquets] = useState([]);
@@ -23,6 +23,18 @@ function DefFlowers({isLogged}) {
         }
     }, []);
 
+    const dialogBouquet = useRef(null);
+    const [bouquetInfo, setBouquetInfo] = useState([]);
+
+    function openDialog(data){
+        setBouquetInfo(data);
+        dialogBouquet.current.showModal();
+    }
+
+    function closeDialog(){
+        dialogBouquet.current.close();
+    }
+
     return (
         <>
             <NavBar isLogged={isLogged}/>
@@ -32,10 +44,12 @@ function DefFlowers({isLogged}) {
             <main className='main-defFlowers'>
                 <section className='flowers-section-defFlowers'>
                     {bouquets?.length ?
-                         ( bouquets?.map((bouquet) => (
-                             <div key={bouquet.id} className="menu-item">
-                             <OptionRect w={100} img={bouquet.image} title={bouquet.name} className={"trl10"} desc={bouquet.description}/>
-                             <BtnAddCart isLogged={isLogged} bouquet={bouquet}/>
+                         ( bouquets?.map((bouquet, index) => (
+                            <div key={index} className="menu-item">
+                                <div onClick={()=>openDialog(bouquet)}>
+                                    <OptionRect  w={100} img={bouquet.image} title={bouquet.name} className={"trl10"} desc={bouquet.description}/>
+                                </div>
+                                <BtnAddCart isLogged={isLogged} bouquet={bouquet}/>
                             </div>
                         )))
                         :
@@ -44,6 +58,17 @@ function DefFlowers({isLogged}) {
                 
                 </section>
             </main>
+
+            <dialog ref={dialogBouquet}>
+                <section>
+                    <img src={bouquetInfo.image} alt="bouquet" style={{width: '150px'}}/>
+                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+                    <p style={{margin: '5px'}}>{bouquetInfo.description}</p>
+                    <p style={{margin: '5px'}}>${bouquetInfo.price} <strong>MXN</strong></p>
+                    </div>
+                    <button onClick={()=>closeDialog()}>OK</button>
+                </section>
+            </dialog>
         </>
     );
 }

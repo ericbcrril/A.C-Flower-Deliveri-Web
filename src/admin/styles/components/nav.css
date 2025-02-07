@@ -25,6 +25,28 @@ nav{
     color: rgb(26, 26, 26);
 }
 
+.menu-icon{
+    cursor: pointer;
+    font-size: 35px;
+    translate: 2px;
+    margin: 5%;
+    margin-right: 10px;
+    color: white;
+    z-index: 3;
+}
+.back-menu-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #01050d;
+    border-radius: 50%;   
+    position: relative;
+    padding: 1px;
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+}
+
 .sec1{
     display: flex;
 }
@@ -35,4 +57,49 @@ nav{
     align-items: center;
     justify-content: center;
     align-content: center;
+}
+
+@media (max-width: 450px) {
+    nav{
+    }
+    
+    .icon, .icon-arrow{
+        cursor: pointer;
+        font-size: 40px;
+        margin: 5%;
+    }
+    .icon-arrow{
+        margin: 0;
+        font-size: 20px;
+    }
+    .menu-icon{
+        font-size: 18px;
+    }
+    .back-menu-icon{
+        padding: 1px;
+        width: 40px;
+        height: 40px;
+        margin: 2px;
+    }
+}
+
+@media (max-height: 450px) {
+    .icon, .icon-arrow{
+        cursor: pointer;
+        font-size: 40px;
+        margin: 5%;
+    }
+    .icon-arrow{
+        margin: 0;
+        font-size: 20px;
+    }
+    .menu-icon{
+        font-size: 18px;
+    }
+    .back-menu-icon{
+        padding: 1px;
+        width: 40px;
+        height: 40px;
+        margin: 2px;
+    }
 }

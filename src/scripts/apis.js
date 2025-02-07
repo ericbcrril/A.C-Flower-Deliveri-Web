@@ -2,6 +2,7 @@ import axios from 'axios';
 import { BASE_URL, handleError, handleResponse } from './response';
 import sanitizeStrings from './sanitizeStrings';
 import { deleteCookie } from './handleCookies';
+import { infoNotification, errorNotification, successNotification } from './notifications';
 /**
  * Obtener todos los elementos.
  * @param {string} collectionName - El nombre de la colección en la base de datos.
@@ -40,7 +41,7 @@ export const getItemsById = async (collectionName , id) => {
 export const createItems = async (collectionName , data) => {
   try {
     const response = await axios.post(`${BASE_URL}/${collectionName}`, data);
-    console.log(response);
+    //console.log(response);
     
     //alert("Registro creado exitosamente");
     return handleResponse(response);
@@ -77,13 +78,13 @@ export const deleteItems = async (collectionName , id) => {
   if(result){
     try {
       const response = await axios.delete(`${BASE_URL}/${collectionName}/${id}`, { withCredentials: true });
-      alert("Registro eliminado");
+      successNotification('Registro eliminado');
       return handleResponse(response);
     } catch (error) {
+      errorNotification('¡Ups!, algo salio mal');
       handleError(error);
-      alert("Error al eliminar el registro");
     }
-  }else{alert("Operacion cancelada");}
+  }else{infoNotification("Operacion cancelada");}
 };
 
 //Registrar un usuario
@@ -101,7 +102,7 @@ export const userRegistered = async (collectionName, event) => {
     cellPhone: sanitizeStrings(phone, 3),
     type: true,
   }
-  console.log(data)
+  //console.log(data)
   //console.log(collectionName)
   if(data.password !== data.confirmPassword){
       return 'Las contraseñas no coinciden';
@@ -137,6 +138,21 @@ export const userLogin = async (event) =>{
   }
   try {
     const response = await axios.post(`${BASE_URL}/accounts/login`, data, { withCredentials: true });
+    handleResponse(response);
+    return {error: '', user: response.data.user, token: response.data.aToken};
+  } catch(error){
+    handleError(error);
+    return {error: error?.response?.data?.error};
+  }
+
+}
+export const userLoginByGoogle = async (clientId, credential) =>{
+  const data = {
+    clientId: clientId,
+    credential: credential,
+  }
+  try {
+    const response = await axios.post(`${BASE_URL}/accounts/loginByGoogle`, data, { withCredentials: true });
     handleResponse(response);
     return {error: '', user: response.data.user, token: response.data.aToken};
   } catch(error){

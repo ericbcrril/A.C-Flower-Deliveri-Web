@@ -1,20 +1,23 @@
 .main-defFlowers{
     display: flex;
-    height: 100%;
+    height: 100dvh;
     align-items: center;
     justify-content: center;
     overflow: hidden;
 }
 
 .flowers-section-defFlowers {
+    position: absolute;
+    bottom: 0;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Define columnas flexibles */
     gap: 10px; /* Espacio entre elementos */
     overflow-y: auto; /* Permite desplazamiento vertical */
     scrollbar-color: #0032cc white;
-    padding: 10%;
-    height: 70%;
-    width: 90%;
+    width: 60%;
+    overflow-x: hidden;
+    align-content: baseline;
+    height: 90vh;
 }
 
 .menu-item {
@@ -22,4 +25,37 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+/*Tablet portrait*/
+@media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
+    .main-defFlowers{
+        height: 100dvh;
+        padding-top: 10%;
+    }
+
+    .flowers-section-defFlowers{
+        height: 90dvh;
+        align-content: baseline;
+        width: 70vw;
+    }
+}
+
+/*Mobile Portrait*/
+@media (max-width: 450px) {
+    .main-defFlowers{
+        height: 100dvh;
+        padding-top: 10%;
+    }
+
+    .flowers-section-defFlowers{
+        height: 90dvh;
+        align-content: baseline;
+        width: 100vw;
+    }
+}
+
+/*Mobile Landscape*/
+@media (max-height: 450px) and (min-width: 650px) and (max-width: 950px) {
+    
 }

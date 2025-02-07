@@ -30,7 +30,7 @@ function ViewOrder({ isLogged }) {
 
     function handleClickView(data){
         setOrderDetails(data);
-        console.log(data);
+        //console.log(data);
         
         setVisible(true);
     }
@@ -86,17 +86,13 @@ function ViewOrder({ isLogged }) {
 
     return positions;
   }, [winW]);
-
-    //const [flowers, setFlowers] = useState(Array(10).fill(null));
-    const [flowers, setFlowers] = useState([]);
   
-
     return (
         <>
             <NavBar isLogged={isLogged} />
             <div className='h1-menu'><h1>A.C Flowers Delivery</h1></div>
 
-            <main className="main-content">
+            <main className="main-viewOrder">
                 <section className='order-section'>
                     <h2>Pedidos</h2>
                     <div className="table-container">
@@ -114,21 +110,24 @@ function ViewOrder({ isLogged }) {
                                     <tr key={index}>
                                         <td>Para: {order.receiver}</td>
                                         <td>
-                                            <button onClick={() => handleClickView({
+                                            <div className='div-button' onClick={() => handleClickView({
                                                 id: order._id,
                                                 items: order.items,
                                                 bouquet: order.bouquet,
                                                 receiver: order.receiver,
+                                                letter: order.letter,
                                                 date: order.date,
                                                 time: order.time,
                                                 state: order.state,
                                                 address: order.address
-                                            })}>Consultar</button>
+                                            })}>Consultar</div>
                                         </td>
                                     </tr>
                                 ))
                                 :
-                                <p>Nada por aqui</p>
+                                <tr>
+                                    <td>Nada por aqui</td>    
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -167,6 +166,10 @@ function ViewOrder({ isLogged }) {
                                 <th>Direccion</th>
                                 <td>{orderDetails?.address?.address}</td>
                             </tr>
+                            <tr>
+                                <th>Carta</th>
+                                <td>{orderDetails?.letter}</td>
+                            </tr>
                         </tbody>
                     </table>
                     <hr />
@@ -193,16 +196,22 @@ function ViewOrder({ isLogged }) {
                                             {orderDetails?.bouquet?.reduce((sum, item) => sum + (item.price || 0), 0)}$ MXN
                                         </td>
                                     </tr>
-                                    <button style={{translate: '120px'}} onClick={()=>setBouquetVisible(true)}>Ver Ramo</button>
+                                    <div className='div-button' style={{translate: '120px'}} onClick={()=>setBouquetVisible(true)}>Ver Ramo</div>
                                 </>
-                            ) : <p>No hay ramo personalizado</p>}
+                            ) : 
+                                <tr>
+                                    <td>Nada por aqui</td>    
+                                </tr>
+                            }
                                 </>
                             :
-                            <p>Nada por aqui</p>
+                                <tr>
+                                    <td>Nada por aqui</td>    
+                                </tr>
                             }
                         </tbody>
-                        <button onClick={()=>setVisible0(false)}><IoReturnUpBackSharp /></button>
                     </table>
+                    <button onClick={()=>setVisible0(false)}><IoReturnUpBackSharp /></button>
                 </section>
                 <section style={{display: bouquetVisible ? '':'none'}} className=''>
                          {/* Flores */}

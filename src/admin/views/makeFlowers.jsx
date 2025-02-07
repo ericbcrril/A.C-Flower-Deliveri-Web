@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import '../styles/views/defFlowers.css';
+import '../styles/html-grandiant.css';
 import NavBar from "../components/misc/navbar";
 import { createItems, getItems, deleteItems, updateItems } from '../../scripts/apis';
 import sanitizeString from '../../scripts/sanitizeStrings';
-import { image } from 'framer-motion/client';
+import { TiPlus } from 'react-icons/ti';
+import { ToastContainer } from 'react-toastify';
+import { infoNotification, errorNotification, successNotification } from '../../scripts/notifications';
 
 function DefFlowers({isLogged}) {
     const [updateBox, setUpdateBox] = useState(false);
+    const [createBox, setCreateBox] = useState(false);
     const [img0, setImg0] = useState();
     const [img1, setImg1] = useState();
     const [formUpdate, setFormUpdate] = useState({
@@ -21,7 +25,7 @@ function DefFlowers({isLogged}) {
     const [items, setItems] = useState([]); 
      const getData = async () => {
             let response = await getItems('items');
-            let flowers = response.filter(response => response.type === 'flower')
+            let flowers = response.filter(response => response.type === 'flower' || response.type === 'foliage')
             let items = response.filter(response => response.type === 'accessory')
             setFlowers(flowers);
             setItems(items);
@@ -53,7 +57,7 @@ function DefFlowers({isLogged}) {
         event.preventDefault();
     
         // Obtener la referencia del formulario
-        const form = document.getElementById('updateItemForm');
+        //const form = document.getElementById('updateItemForm');
         const img = event.target.img?.files[0];
     
         // Crear un objeto con los datos actualizados
@@ -65,6 +69,12 @@ function DefFlowers({isLogged}) {
     
         // Si hay una nueva imagen, leerla como base64
         if (img) {
+            const fileSizeMB = img.size / (1024 * 1024); // Convertir img a MB
+            /* Comprobacion de imagen */
+            if (fileSizeMB > 1) {
+                infoNotification("La imagen no puede ser mayor a 1MB");
+                return null;
+            } 
             const reader = new FileReader();
             reader.onloadend = async () => {
                 data.image = reader.result; // Actualizar la imagen con el base64
@@ -79,32 +89,45 @@ function DefFlowers({isLogged}) {
     
     async function enviarDatosActualizados(data) {
         try {
-            console.log('Datos a enviar:', data);
+            //console.log('Datos a enviar:', data);
             await updateItems('items', formUpdate._id, data); // Llama a tu API para actualizar
             setImg0(data.image);
+            successNotification('Registro actualizado correctamente');
             getData(); // Actualiza la lista de ramos
-            alert('Registro actualizado');
         } catch (error) {
+            errorNotification('¡Ups!, algo salio mal');
             console.error('Error al actualizar el ítem:', error);
         }
     }
     
 
     async function handleDelete(id){
-        await deleteItems('items', id);
-        getData();
+        try {
+            await deleteItems('items', id);
+            getData();
+        } catch (error) {
+            console.error('Error al eliminar el ítem:', error);
+        }
     }
     
     function handleSubmitNewItem(event) {
         event.preventDefault();
         let form = document.getElementById('newItemForm');
         let img = event.target.img.files[0];
-      
+        const fileSizeMB = img.size / (1024 * 1024); // Convertir img a MB
+
+        /* Comprobacion de imagen */
+
         if (!img) {
-          alert("Por favor, seleccione una imagen.");
-          return;
-        }
-      
+            infoNotification("Por favor, seleccione una imagen.");
+            return null;
+          }
+
+        if (fileSizeMB > 0.5) {
+            infoNotification("La imagen no puede ser mayor a 500KB");
+            return null;
+        } 
+        
         // Crear un FileReader para leer la imagen
         const reader = new FileReader();
       
@@ -123,9 +146,10 @@ function DefFlowers({isLogged}) {
             await createItems('items', data);
             form.reset();
             setImg1(null);
+            successNotification('Nuevo registro en base de datos');
             getData(); // Actualiza la lista de ramos
-            alert('Nuevo item registrado');
           } catch (error) {
+            errorNotification('¡Ups!, algo salio mal');
             console.error("Error al crear el item:", error);
           }
         };
@@ -144,7 +168,7 @@ function DefFlowers({isLogged}) {
             </div>
             <main className='main-defFlowers'>
                 <div className='container-data'>
-                <h2>Flores</h2>
+                <h2>Flores y Follajes</h2>
                     <div className="table-container0">
                     <table>
                         <thead>
@@ -156,10 +180,10 @@ function DefFlowers({isLogged}) {
                         </thead>
                         <tbody>
 
-                            {flowers.map((flowers) => (
-                                <tr>
+                            {Array.isArray(flowers) && flowers.map((flowers, index) => (
+                                <tr key={flowers._id}>
                                     <td>{flowers.name}</td>
-                                    <td>{flowers.price}</td>
+                                    <td>${flowers.price} <strong>MXN</strong></td>
                                     <td>
                                         <button onClick={() => handleClickUpdate(flowers)}>Editar</button>
                                         <button onClick={() => handleDelete(flowers._id)}>Eliminar</button>
@@ -181,10 +205,10 @@ function DefFlowers({isLogged}) {
                         </thead>
                         <tbody>
 
-                            {items.map((items) => (
-                                <tr>
+                            {Array.isArray(items) && items.map((items, index) => (
+                                <tr key={items._id}>
                                     <td>{items.name}</td>
-                                    <td>{items.price}</td>
+                                    <td>${items.price} <strong>MXN</strong></td>
                                     <td>
                                         <button onClick={() => handleClickUpdate(items)}>Editar</button>
                                         <button onClick={() => handleDelete(items._id)}>Eliminar</button>
@@ -198,35 +222,37 @@ function DefFlowers({isLogged}) {
                     
                 </div>
                 
-                <div className='container-data' style={{display: updateBox ? '':'none'}}>
+                <div className='container-data createBox' style={{display: updateBox ? 'flex':'none'}}>
                     <h2>{formUpdate.name ? formUpdate.name:'Editar'}</h2>
                     <img src={img0} alt="" />
                     <form onSubmit={handleUpdate} id='updateItemForm'>
                         <input type="file" name="img" id="" accept=".png, .jpg, .jpeg, .webp"/>
                         <input type="text" name="name" id="" placeholder='Nombre' value={formUpdate.name} onChange={handleChange}/>
-                        <input type="number" name="price" id="" placeholder='Precio' value={formUpdate.price} onChange={handleChange}/>
+                        <input type="number" name="price" id="" placeholder='Precio MXN' min={0} value={formUpdate.price} onChange={handleChange}/>
                         <button type='submit'>Guardar</button>
                     </form>
                         <button onClick={() => setUpdateBox(false)}>Cancelar</button>
                 </div>
                 
-                <div className='container-data'>
+                <div className='container-data createBox' style={{display: createBox ? 'flex':''}}>
                     <h2>Nuevo Registro</h2>
                     <img src={img1} alt="" />
                     <form onSubmit={handleSubmitNewItem} id='newItemForm'>
                         <input type="file" name="img" accept=".png, .jpg, .jpeg, .webp" onChange={handleChangeImg} required/>
                         <input type="text" name="name" placeholder='Nombre' required/>
-                        <input type="number" name="price" placeholder='Precio' required/>
+                        <input type="number" name="price" placeholder='Precio MXN' min={0} required/>
                         <select name="type" defaultValue={'flower'}>
                           <option value='flower'>🌺 Flor</option>
                           <option value='foliage'>🌿 Follage</option>
                           <option value='accessory'>🍬 Accesorio</option>
                         </select>
                         <button type='submit'>Guardar</button>
-                        <button type='reset'>Cancelar</button>
+                        <button type='reset' onClick={()=> setCreateBox(false)}>Cancelar</button>
                     </form>
                 </div>
             </main>
+            <TiPlus className='btn-add-register' onClick={()=> setCreateBox(!createBox)}/>
+            <ToastContainer />
         </>
     );
 }

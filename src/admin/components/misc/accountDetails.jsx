@@ -17,7 +17,7 @@ function AccountDetails({visible, isLogged}){
                 <button onClick={() => navigate('/Ajustes')} style={{width: 'fit-content', alignSelf: 'center'}}>
                     <IoSettings color='white'/>
                 </button>
-                <button onClick={ () => userLogout(isLogged.token) }>
+                <button onClick={ () => userLogout() }>
                     <ImExit color='white'/>
                 </button>
             </div>

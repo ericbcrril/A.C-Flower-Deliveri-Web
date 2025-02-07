@@ -1,16 +1,10 @@
-@keyframes Apearup {
-    from{
-        translate: 0 -100%;
-    }
-    to{
-        translate: 0 0;
-    }
-}
 
-.main-content {
+
+.main-viewOrder {
     display: flex;
     flex-direction: row;
     gap: 20px;
+    height: 100dvh;
     justify-content: center;
     align-items: center;
     padding: 20px;

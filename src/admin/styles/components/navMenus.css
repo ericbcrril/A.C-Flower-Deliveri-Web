@@ -1,19 +1,5 @@
-@keyframes Apearleft {
-    from{
-        translate: -100% 0;
-    }
-    to{
-        translate: 0 0;
-    }
-}
-@keyframes Apearup {
-    from{
-        translate: 0 -100%;
-    }
-    to{
-        translate: 0 0;
-    }
-}
+
+
 
 .navMenu, .accountDetails, .shopping-cart{
     display: flex;

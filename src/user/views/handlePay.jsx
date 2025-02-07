@@ -1,81 +1,75 @@
-import { FcOk } from "react-icons/fc";
+import { FcOk, FcInfo } from "react-icons/fc";
 import { VscError } from "react-icons/vsc";
 import { Link } from "react-router-dom";
 import '../styles/views/handlePay.css';
-import { deleteCookie, getCookie } from "../../scripts/handleCookies";
-import { createItems } from "../../scripts/apis";
-import { useNavigate } from "react-router-dom";
-
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
+import { BASE_URL } from "../../scripts/response";
 
 function HandlePay(){
+    const [paymentSuccess, setPaymentSuccess] = useState(null);
+    const [paymentFail, setPaymentFail] = useState(true);
+    const [searchParams] = useSearchParams();
+    const sessionId = searchParams.get('session_id');
+    const orderData = JSON.parse(localStorage.getItem('orderData'));
 
-    const navigate = useNavigate();
-    const params = new URLSearchParams(window.location.search);
-    const state =   params.get('state') === 'true';
-    let cart = getCookie('cart');
+    // Evitar llamadas duplicadas con un flag
+    const hasFetched = useRef(false);
 
-    if(state && cart !== null){
-        const userId =  params.get('userId');
-        const receiver= params.get('receiver');
-        const date =    params.get('date');
-        const time =    params.get('time');
-        const letter =  params.get('letter');
-        const addressString = params.get('address');
-        const address = JSON.parse(decodeURIComponent(addressString));
-        console.log(address);
-        
-        
-        let formattedInput = `[${cart.replace(/}{/g, '},{')}]`;
-        let items = JSON.parse(formattedInput);
-        
-    
-        async function handleGenOrder(){
-            try {
-                let data = {
-                    userId: userId,
-                    receiver: receiver,
-                    items: items,
-                    date: date,
-                    time: time,
-                    letter: letter,
-                    address: address,
-                };
-                console.log(data);
-                
-                await Promise.all([
-                    createItems('orders', data),
-                    deleteCookie('cart', '/')
-                ]) 
-                navigate('/handlePay?state=true');
-            } catch (error) {
-                console.error('Error al generar el pedido:', error);
-                alert('Hubo un error al generar el pedido.');
-            }
+    useEffect(() => {
+        if (!sessionId || hasFetched.current) {
+            setPaymentSuccess(false);
+            return;
         }
-        handleGenOrder();
-    }    
 
-    return(
-        <main>
-                <div className="handlePay-container-message">
-                    {state ?
-                        <>
-                            <FcOk size={48}/>
-                            <p>Puedes ver el estado de tu pedido en <Link to='/ConsultarPedido'>Consultar Pedido</Link></p>
-                            <Link to='/Menu'>
+        hasFetched.current = true; // Marcar como ejecutado
+
+        const verifyPayment = async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/stripe/paymentStatus/${sessionId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: orderData ? JSON.stringify({ orderData }) : null,
+                });
+
+                const data = await response.json();
+                
+                setPaymentSuccess(data.success);
+                setPaymentFail(data.success);
+                localStorage.removeItem('orderData');
+            } catch (error) {
+                setPaymentSuccess(false);
+            }
+        };
+
+        verifyPayment();
+    }, [sessionId]); // Dependencia explícita
+
+    return (
+        <main style={{display: 'flex', justifyContent: "center", alignItems: "center", height: '100dvh'}}>
+                {paymentSuccess ? (
+                    <div style={{display: !paymentFail ? 'none':'' }} className="handlePay-container-message">
+                        <FcOk size={48}/>
+                        <p>Puedes ver el estado de tu pedido en <Link to='/ConsultarPedido'>Consultar Pedido</Link></p>
+                        <Link to='/Menu'>
                             <button>OK</button>
-                            </Link>
-                        </>
-                        :
-                        <>
-                            <VscError size={48} color='red'/>
-                            <p>Algo salio mal, intentalo de nuevo mas tarde</p>
-                            <Link to='/Menu'>
+                        </Link>
+                    </div>
+                ) : (
+                    <div style={{display: !paymentFail ? 'none':'' }} className="handlePay-container-message">
+                        <FcInfo size={48} color='red'/>
+                        <p>Verificando tu pago...</p>
+                    </div>
+                )}
+                {!paymentFail && (
+                    <div className="handlePay-container-message">
+                        <VscError size={48} color='red'/>
+                        <p>Algo salió mal, inténtalo de nuevo más tarde</p>
+                        <Link to='/Menu'>
                             <button>OK</button>
-                            </Link>
-                        </>
-                    }
-                </div>
+                        </Link>
+                    </div>
+                )}
         </main>
     );
 }

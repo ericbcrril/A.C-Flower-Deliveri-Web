@@ -9,7 +9,7 @@ function NavMenu({visible, isLogged}){
             <Link to="/Ramos">Ramos</Link>
             <Link to="/ArmarRamo">Armar Ramo</Link>
             <Link to={isLogged.login ? "/ConsultarPedido":"/Login"}>Consultar Pedido</Link>
-            <Link to="/ArmarRamo">Administrar Usuarios</Link>
+            <Link to="/AdminUsuarios">Administrar Usuarios</Link>
         </section>
     );
 }

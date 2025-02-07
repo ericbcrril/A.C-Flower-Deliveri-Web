@@ -1,14 +1,17 @@
 import React from 'react';
 import '../styles/views/viewOrder.css';
+import '../styles/html-grandiant.css';
 import NavBar from "../components/misc/navbar";
 import { useState, useEffect, useMemo } from 'react';
 import { getItems, updateItems } from '../../scripts/apis';
 import { FaCheck } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import { IoReturnUpBackSharp } from "react-icons/io5";
 
 function ViewOrder({isLogged}) {
     const [orders, setOrders] = useState([]);
     const [ordersF, setOrdersF] = useState([]);
+    const [ordersFVisible, setOrdersFVisible] = useState(false);
     const [orderDetails, setOrderDetails] = useState([]);
     const [progressVisible, setProgressVisible] = useState(false);
     const [detailsVisible, setDetailsvisible] = useState(false);
@@ -68,7 +71,6 @@ function ViewOrder({isLogged}) {
 
     function handleClickView(data){
         setOrderDetails(data);
-        setDetailsvisible(true);
         data?.state ? 
             setProgressVisible(true)
         :
@@ -86,53 +88,67 @@ function ViewOrder({isLogged}) {
             console.error('Error updating order state:', error);
         }
     };
+
+    //Ver Ramo 
+        // Calcular posiciones de flores en función del tamaño del ramo
+          const [winW, setWinW] = useState(window.innerWidth);
+          const [bouquetVisible, setBouquetVisible] = useState(false);
         
-//Ver Ramo 
-    // Calcular posiciones de flores en función del tamaño del ramo
-      const [winW, setWinW] = useState(window.innerWidth);
-      const [bouquetVisible, setBouquetVisible] = useState(false);
+      // Manejar el evento de redimensionamiento de la ventana
+        useEffect(() => {
+          const handleResize = () => setWinW(window.innerWidth);
+          window.addEventListener('resize', handleResize);
+          return () => {
+            window.removeEventListener('resize', handleResize);
+          };
+        }, []);
     
-  // Manejar el evento de redimensionamiento de la ventana
-    useEffect(() => {
-      const handleResize = () => setWinW(window.innerWidth);
-      window.addEventListener('resize', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }, []);
+      const flowerPositions = useMemo(() => {
+        const positions = [];
+        const center = { x: 0, y: 0 };
+        positions.push(center);
+    
+        const createCircle = (count, radius) => {
+          const angleIncrement = (2 * Math.PI) / count;
+          for (let i = 0; i < count; i++) {
+            const angle = i * angleIncrement;
+            positions.push({
+              x: radius * Math.cos(angle),
+              y: radius * Math.sin(angle),
+            });
+          }
+        };
+    
+        let value0 = 18;
+        let value1 = 11;
+        let value2 = 8;
+    
+        if(winW < 1024){
+           value0 = 10;
+           value1 = 6;
+           value2 = 4;
+        }   
+        if(winW < 450){
+           value0 = 6.5;
+           value1 = 4;
+           value2 = 2.8;
+        }   
+    
+          createCircle(9, winW / value0);
+          createCircle(13, winW / value1);
+          createCircle(20, winW / value2);
+    
+        return positions;
+      }, [winW]);
+    
 
-  const flowerPositions = useMemo(() => {
-    const positions = [];
-    const center = { x: 0, y: 0 };
-    positions.push(center);
-
-    const createCircle = (count, radius) => {
-      const angleIncrement = (2 * Math.PI) / count;
-      for (let i = 0; i < count; i++) {
-        const angle = i * angleIncrement;
-        positions.push({
-          x: radius * Math.cos(angle),
-          y: radius * Math.sin(angle),
-        });
-      }
-    };
-
-
-      createCircle(9, winW / 18);
-      createCircle(13, winW / 11);
-      createCircle(20, winW / 8);
-
-    return positions;
-  }, [winW]);
-
-    //const [flowers, setFlowers] = useState(Array(10).fill(null));
-    const [flowers, setFlowers] = useState([]);
     return (
         <>
             <NavBar isLogged={isLogged}/>
             <div className='h1-menu'><h1>A.C Flowers Delivery</h1></div>
 
-            <main className="main-content">
+            <main className="main-viewOrder">
+                
                 <section className='order-section'>
                     <h2>Pedidos Pendientes</h2>
                     <div className="table-container">
@@ -155,6 +171,7 @@ function ViewOrder({isLogged}) {
                                                 items: order.items,
                                                 bouquet: order.bouquet,
                                                 receiver: order.receiver,
+                                                letter: order.letter,
                                                 date: order.date,
                                                 time: order.time,
                                                 state: order.state,
@@ -168,10 +185,9 @@ function ViewOrder({isLogged}) {
                                 }
                             </tbody>
                         </table>
+                        <button onClick={()=>setOrdersFVisible(!ordersFVisible)}>Pedidos finalizados</button>
                     </div>
                 </section>
-
-                
 
                 <section className="progress-section" style={{ display: progressVisible ? 'flex' : 'none' }}>
             <h2>Progreso del Pedido</h2>
@@ -241,7 +257,9 @@ function ViewOrder({isLogged}) {
                 onClick={() => updateOrderFinalized()}
                 >Finalizar</button>
             )}
-        </section>
+            <button onClick={()=>setDetailsvisible(true)}>Detalles</button>
+            <button onClick={()=>setProgressVisible(false)}><IoReturnUpBackSharp /></button>
+                </section>
                 
                 <section className='details-section' style={{display: detailsVisible ? 'flex' : 'none'}}>
                     <h2>Detalles de Entrega</h2>
@@ -263,6 +281,10 @@ function ViewOrder({isLogged}) {
                                 <th>Direccion</th>
                                 <td>{orderDetails?.address?.address}</td>
                             </tr>
+                            <tr>
+                                <th>Carta</th>
+                                <td>{orderDetails?.letter}</td>
+                            </tr>
                         </tbody>
                     </table>
                     <hr />
@@ -278,7 +300,7 @@ function ViewOrder({isLogged}) {
                             {orderDetails?.items.map((item) => (
                                 <tr >
                                     <td>{item?.name}</td>
-                                    <td>{item?.price}$ MXN</td>
+                                    <td>${item?.price} <strong>MXN</strong></td>
                                 </tr>
                             ))}
                             {orderDetails?.bouquet && Array.isArray(orderDetails?.bouquet) && orderDetails.bouquet.length > 0 ? (
@@ -286,7 +308,7 @@ function ViewOrder({isLogged}) {
                                     <tr>
                                         <td>Ramo Personalizado</td>
                                         <td>
-                                            {orderDetails?.bouquet?.reduce((sum, item) => sum + (item.price || 0), 0)}$ MXN
+                                            ${orderDetails?.bouquet?.reduce((sum, item) => sum + (item.price || 0), 0)} <strong>MXN</strong>
                                         </td>
                                     </tr>
                                     <button style={{translate: '120px'}} onClick={()=>setBouquetVisible(true)}>Ver Ramo</button>
@@ -299,36 +321,27 @@ function ViewOrder({isLogged}) {
                             }
                         </tbody>
                     </table>
+                    <button onClick={()=>setDetailsvisible(false)}><IoReturnUpBackSharp /></button>
                 </section>
 
-                <section className='order-section'>
-                    <h2>Pedidos Entregados</h2>
+                <section className='order-section' style={{display: ordersFVisible ? '':'none'}}>
+                    <h2>Pedidos Finalizados</h2>
                     <div className="table-container">
                         <table className='table-orders'>
                             <thead>
                                 <tr>
-                                    <th></th>
-                                    <th>Acciones</th>
+                                    <th>Pedidos</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                 ordersF.length > 0 ? 
                                 ordersF.map((order, index) => (
-                                    <tr key={index}>
-                                        <td>Para: {order.receiver}</td>
-                                        <td>
-                                            <button onClick={() => handleClickView({
-                                                id: order._id,
-                                                items: order.items,
-                                                bouquet: order.bouquet,
-                                                receiver: order.receiver,
-                                                date: order.date,
-                                                time: order.time,
-                                                state: false,
-                                                address: order.address
-                                            })}>Consultar</button>
-                                        </td>
+                                    <tr key={index} style={{display: 'flex', flexDirection: 'row'}}>
+                                        <td style={{ resize: 'horizontal', overflow: 'hidden', display: 'flex', minWidth: '20px', width: '50px' }}>{order.userId}</td>
+                                        <td style={{ resize: 'horizontal', overflow: 'hidden', display: 'flex', minWidth: '20px', width: 'fit-content' }}>{order.receiver}</td>
+                                        <td style={{ resize: 'horizontal', overflow: 'hidden', display: 'flex', minWidth: '20px', width: 'fit-content' }}>{order.date}</td>
+                                        <td style={{ resize: 'horizontal', overflow: 'hidden', display: 'flex', minWidth: '20px', width: 'fit-content' }}>{order.address.address}</td>
                                     </tr>
                                 ))
                                 :
@@ -336,8 +349,10 @@ function ViewOrder({isLogged}) {
                                 }
                             </tbody>
                         </table>
+                        <button onClick={()=>setOrdersFVisible(!ordersFVisible)}><IoReturnUpBackSharp /></button>
                     </div>
                 </section>
+
                 <section style={{display: bouquetVisible ? '':'none'}} className=''>
                          {/* Flores */}
                         <div className="flowers-container-order">
@@ -363,6 +378,7 @@ function ViewOrder({isLogged}) {
                             <button onClick={() => setBouquetVisible(false)}>X</button>
                         </div>
                 </section>
+
             </main>
         </>
     );

@@ -1,3 +1,6 @@
+*{
+  font-family: Arial, Helvetica, sans-serif;
+}
 
 html{
   background-color: rgb(130,87,214);
@@ -10,7 +13,7 @@ html, body{
   margin: 0;
 }
 
-button {
+button, .div-button {
   background-color: #01050d; 
   border: .5px solid rgba(255, 255, 255, .5) !important;
   color: white;
@@ -22,12 +25,27 @@ button {
   transition: all 0.3s;
 }
 
-button:active {
+button:active, .div-button:active {
   background-color: white;
 }
 
-button:hover {
+button:hover, .div-button:hover {
   border: .5px solid rgba(255, 255, 255, 1) !important;
+}
+
+dialog {
+  color: white;
+  background-color: rgba(1, 5, 13, .99);
+  border: .5px solid white;
+  border-radius: 15px;
+  min-width: 150px;
+}
+
+dialog section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .h1-menu{
@@ -104,5 +122,30 @@ button:hover {
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes Apearleft {
+  from{
+      translate: -100% 0;
+  }
+  to{
+      translate: 0 0;
+  }
+}
+@keyframes Apearup {
+  from{
+      translate: 0 -100%;
+  }
+  to{
+      translate: 0 0;
+  }
+}
+@keyframes Apeardown {
+  from{
+      translate: 0 100%;
+  }
+  to{
+      translate: 0 0;
   }
 }

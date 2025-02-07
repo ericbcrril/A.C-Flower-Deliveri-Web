@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
-import '../styles/views/home.css';
+import '../../shared/styles/views/home.css';
+import '../styles/html-grandiant.css';
 
 function Home({isLogged}){
     //alert("Bienvenido ", isLogged?.user);
     return(
-        <main className='admin-main-home'>
+        <main className='main-home'>
             <Link to="/Menu">
                 <img className="main-logo500" src="GG (3).webp" alt="logo500" />
             </Link>

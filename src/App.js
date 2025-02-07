@@ -5,17 +5,19 @@ import { AnimatePresence, motion } from 'framer-motion';
 import './App.css';
 //Scripts
 import { validateToken, getItemsById } from './scripts/apis';
+import { deleteAllCookies } from './scripts/handleCookies';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 // Views Usuario
 import Home from './user/views/home';
 import Menu from './user/views/menu';
 import DefFlowers from './user/views/defFlowers';
-import Login from './user/views/login';
-import LoadPage from './user/views/loadPage';
-const UserSettings = lazy(() => import('./user/views/userSettings'));
+import Login from './shared/views/login';
+import LoadPage from './shared/views/loadPage';
+import NotFoundPage from './shared/views/notFoundPage';
+const UserSettings = lazy(() => import('./shared/views/userSettings'));
 const MakeFlowers = lazy(() => import('./user/views/makeFlowers'));
 const ViewOrder = lazy(() => import('./user/views/viewOrder'));
 const HandlePay = lazy(() => import('./user/views/handlePay'));
-const HandlePayBouquet = lazy(() => import('./user/views/handlePayBouquet'));
 //Views Administrador
 const AdminHome = lazy(() => import('./admin/views/home'));
 const AdminMenu = lazy(() => import('./admin/views/menu'));
@@ -30,7 +32,6 @@ function App() {
   const location = useLocation();
   const [isLogged, setIsLogged] = useState({
     user:   'user0',
-    token: 'noToken',
     id: '',
     type: true,// admin: false y user: true
     login: false,
@@ -41,13 +42,17 @@ function App() {
       try {
           const isTokenValid = await validateToken();
           if (isTokenValid?.isValid) {
-            const response = await getItemsById('accounts', isTokenValid.id);
+            const response = await getItemsById('accounts', isTokenValid?.id);
+            if (response.error) {
+                deleteAllCookies();
+                return null;
+            }
             setIsLogged((prev) => ({
               ...prev,
-              user: response.user,
-              id: isTokenValid.id,
-              type: response.type,
-              login: true,
+              user: response?.user || '',
+              id: isTokenValid?.id || '',
+              type: response.type  ? true : false,
+              login: response.user ? true : false,
             }));
           } 
         
@@ -76,6 +81,7 @@ function App() {
       <Suspense fallback={<LoadPage/>}>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
+            <Route path='*' element={<NotFoundPage />}/>
             <Route
               path="/loadPage"
               element={
@@ -209,19 +215,6 @@ function App() {
                 </motion.div>
               }
             />
-            <Route
-              path="/handlePayBouquet"
-              element={
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ y: "-100%" }}
-                  transition={{ duration: 0.5 }}
-                  style={{height: "100%"}}>
-                  <HandlePayBouquet/>
-                </motion.div>
-              }
-            />
           </Routes>
         </AnimatePresence>
       </Suspense>
@@ -233,6 +226,7 @@ function App() {
       <Suspense fallback={<LoadPage/>}>
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
+          <Route path='*' element={<NotFoundPage />}/>
           <Route
             path="/"
             element={

@@ -1,19 +1,5 @@
-@keyframes Apearleft {
-    from{
-        translate: -100% 0;
-    }
-    to{
-        translate: 0 0;
-    }
-}
-@keyframes Apearup {
-    from{
-        translate: 0 -100%;
-    }
-    to{
-        translate: 0 0;
-    }
-}
+
+
 
 .navMenu, .accountDetails, .shopping-cart{
     display: flex;
@@ -46,7 +32,7 @@
     font-size: medium;
     color: white;
     text-decoration: none;
-    margin: 15px;
+    margin: 10px;
 }
 .accountDetails button{
     border: .5px solid rgba(255, 255, 255, .5);
@@ -63,9 +49,17 @@
     border-radius: 20px;
     animation: Apearup .5s forwards;
     z-index: 3;
-    width: 20%;
+    min-width: 200px;
+    width: fit-content;
+    border: .5px solid white;
 }
-.accountDetails{width: fit-content; height: fit-content;}
+.accountDetails{
+    display: flex;
+    align-items: center;
+    width: fit-content; 
+    min-width: 50px !important; 
+    height: fit-content;
+}
 
 .orders-div{
     display: flex;
@@ -94,6 +88,7 @@
     margin: 5px;
     border-radius: 10px;
     border: none;
+    color: black;
 }
 .shopping-cart div{
     display: flex;
@@ -104,18 +99,19 @@
 }
 
 .order-details-section{
-    position: fixed;
-    right: 25vw;
     padding: 25px;
-    display: flex;
     border-radius: 20px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
     background-color: rgba(1, 5, 13, .99);
+    border: .5px solid white;
     z-index: 2;
     height: fit-content;
     width: fit-content;
+    max-width: 415px;
+}
+
+.order-details-section .form-section {
+    display: block;
+    text-align: center;
 }
 
 .order-details-section select{
@@ -127,6 +123,7 @@
     border-radius: 10px;
     border: none;
 }
+
 
 /*Tablet Portrait*/
 @media (min-width: 451px) and (max-width: 1024px) and (min-height: 720px) {
@@ -140,10 +137,6 @@
     }
     .accountDetails{width: fit-content; height: fit-content;}
     
-    .order-details-section{
-        right: 20vw;
-        top: 10dvh;
-    }
 }
 
 /*Mobile Portrait*/
@@ -157,11 +150,7 @@
         top: 65px;
     }
     .accountDetails{width: fit-content; height: fit-content;}
-   
-    .order-details-section{
-        right: 20vw;
-        top: 10dvh;
-    }
+
 }
 
 /*Mobile Landscape*/
@@ -191,13 +180,5 @@
     }
     .accountDetails{width: fit-content; height: fit-content;}
     
-    .order-details-section{
-        right: 20vw;
-        top: -10dvh;
-        max-height: 70dvh;
-        overflow-y: scroll;
-        scrollbar-color: white transparent;
-        scrollbar-width: thin;
-        font-size: small;
-    }
+
 }

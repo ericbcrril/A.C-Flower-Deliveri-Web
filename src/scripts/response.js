@@ -1,4 +1,6 @@
-export const BASE_URL = 'http://localhost:5000/api'; // Reemplaza con la URL base de tu API
+//export const BASE_URL = 'http://localhost:5000/api'; // Reemplaza con la URL base de tu API
+export const BASE_URL = 'https://acflowersdelivery.com:5000/api'; // Reemplaza con la URL base de tu API
+export const STRIPE_PUBLIC_KEY = 'pk_live_51Qh4RcJRYDnPPqdInzNyNzII1o32NDuTmAAM6Frn4N1ksdfyeUai9ipQXSHSzdjP6hpVuKSL9PH7qjAL7Y7AXJXX00oxUypU6n'; // Reemplaza con la URL base de tu API
 /**
  * 
  * @param {any} response -El resultado de tu consulta al backend.

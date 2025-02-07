@@ -25,7 +25,7 @@ export function setCookie(name, value, days = 7, path = '/', secure = false, sam
     }
 
     document.cookie = cookieString;
-    console.log(`Cookie "${name}" guardada.`);
+    //console.log(`Cookie "${name}" guardada.`);
 }
 
 // Función para leer una cookie
@@ -41,7 +41,7 @@ export function getCookie(name) {
 // Función para eliminar una cookie
 export function deleteCookie(name, path = '/') {
     document.cookie = `${name}=; expires=Thu, 01 Jan 2000 00:00:00 UTC; path=${path};`;
-    console.log(`Cookie "${name}" eliminada.`);
+    //console.log(`Cookie "${name}" eliminada.`);
 }
 // Función para eliminar todas las cookies
 export function deleteAllCookies() {
