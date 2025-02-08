@@ -1,0 +1,35 @@
+{
+  "name": "ac-flowers-delivery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon server.js"
+  },
+  "keywords": [],
+  "author": "good-guys",
+  "contributors": [
+    {
+      "name": "Eric Alejandro Becerril Solis",
+      "email": "ericbecerril1234@gmail.com",
+      "github": "https://github.com/ericbcrril",
+      "linkedin": "https://www.linkedin.com/in/ericbcrril061021/"
+    }
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.1",
+    "google-auth-library": "^9.15.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.3",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.0",
+    "stripe": "^17.5.0"
+  }
+}

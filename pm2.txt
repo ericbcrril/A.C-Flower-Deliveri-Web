@@ -1,0 +1,35 @@
+🔹 2. Usar pm2 (Process Manager for Node.js)
+PM2 es una herramienta popular para gestionar procesos de Node.js. Permite ejecutar tu aplicación en segundo plano y reiniciarla automáticamente si falla.
+
+🔸 Paso 1: Instalar PM2
+bash
+Copy
+Edit
+npm install pm2 -g
+🔸 Paso 2: Ejecutar tu servidor con PM2
+bash
+Copy
+Edit
+pm2 start index.js --name mi-backend
+Esto ejecutará tu servidor Express y lo gestionará en segundo plano. Además, puedes darle un nombre (--name mi-backend), para poder gestionarlo fácilmente.
+
+🔸 Paso 3: Verificar el proceso
+Puedes ver el estado de los procesos de Node.js con:
+
+bash
+Copy
+Edit
+pm2 list
+🔸 Paso 4: Guardar el proceso
+Para hacer que PM2 mantenga el proceso incluso después de reiniciar el VPS:
+
+bash
+Copy
+Edit
+pm2 save
+Y para asegurarte de que PM2 se inicie al arrancar el VPS:
+
+bash
+Copy
+Edit
+pm2 startup

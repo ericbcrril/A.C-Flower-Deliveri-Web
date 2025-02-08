@@ -304,8 +304,13 @@ const handleDragStart = (e, item) => {
   };
 
   async function openDialog() {
-    let flowersNow = await genBouquet();
+    let res = await genBouquet();
+    let bouquet = res.bouquet;
+    if(bouquet.length === bouquetSize){
       dialogOrderForm.current.showModal();
+    }else{
+      openDialogEditor('Completa el ramo antes de continuar');
+    }
 }
 
 function closeDialog() {
@@ -333,7 +338,8 @@ function closeDialogEditor() {
         {/* Accesorios */}
         <div className="accs-section">
           {accessoryOptions?.map(accessory => (
-            <div
+            <div className="flower-and-name-container">
+              <div
               key={accessory.id}
               className={`element-box ${selectedItem === accessory ? "selected" : ""}`}
               draggable
@@ -347,12 +353,15 @@ function closeDialogEditor() {
                 style={{ width: "50px", height: "50px" }}
               />
             </div>
+            <p>{accessory.name}</p>
+            </div>
           ))}
         </div>
         {/* Follages */}
         <div className="foliage-section">
           {foliageOptions?.map(foliage => (
-            <div
+            <div className="flower-and-name-container">
+              <div
               key={foliage.id}
               className={`element-box ${selectedItem === foliage ? "selected" : ""}`}
               draggable
@@ -365,6 +374,8 @@ function closeDialogEditor() {
                 title={`${foliage.name} $${foliage.price} MXN`}
                 style={{ width: "50px", height: "50px" }}
               />
+            </div>
+            <p>{foliage.name}</p>
             </div>
           ))}
         </div>
@@ -406,7 +417,7 @@ function closeDialogEditor() {
         {/* Editor */}
         <section className="editor-section">
           {/* Contenedor de Accesorios */}
-          <div className="accs-container accs-section-position">
+          <div className="accs-container foliage-container">
             <h3>Accesorios</h3>
             <hr />
             <div>
@@ -460,7 +471,7 @@ function closeDialogEditor() {
           </div>
 
           {/* Contenedor de Follajes */}
-          <div className="accs-container foliage-section-position">
+          <div className="foliage-container">
             <h3>Follajes</h3>
             <hr />
             <div>
