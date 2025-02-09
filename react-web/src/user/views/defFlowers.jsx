@@ -47,7 +47,7 @@ function DefFlowers({isLogged}) {
                          ( bouquets?.map((bouquet, index) => (
                             <div key={index} className="menu-item">
                                 <div onClick={()=>openDialog(bouquet)}>
-                                    <OptionRect  w={100} img={bouquet.image} title={bouquet.name} className={"trl10"} desc={bouquet.description}/>
+                                    <OptionRect  w={100} img={bouquet.image} p={bouquet.name} className={"trl10"} desc={bouquet.name}/>
                                 </div>
                                 <BtnAddCart isLogged={isLogged} bouquet={bouquet}/>
                             </div>
@@ -63,7 +63,8 @@ function DefFlowers({isLogged}) {
                 <section>
                     <img src={bouquetInfo.image} alt="bouquet" style={{width: '150px'}}/>
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-                    <p style={{margin: '5px'}}>{bouquetInfo.description}</p>
+                    <h4 style={{margin: '5px'}}>{bouquetInfo.name}</h4>
+                    <p style={{margin: '10px', maxWidth: '320px', hyphens: 'auto', wordWrap: 'break-word', overflowWrap: 'break-word'}}>{bouquetInfo.description}</p>
                     <p style={{margin: '5px'}}>${bouquetInfo.price} <strong>MXN</strong></p>
                     </div>
                     <button onClick={()=>closeDialog()}>OK</button>

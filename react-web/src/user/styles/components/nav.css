@@ -1,6 +1,6 @@
 nav{
     background: linear-gradient(90deg, rgba(130,87,214,1) 10%, rgba(235,248,192,1) 100%);
-    position: absolute;
+    position: fixed;
     display: flex;
     width: 100vw;
     top: 0;

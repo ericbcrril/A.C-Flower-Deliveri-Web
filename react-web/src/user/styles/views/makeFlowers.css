@@ -7,7 +7,7 @@
     flex-direction: column;
     position: fixed;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     top: 100px;
     background-color: white;
     height: 65vh;
@@ -185,6 +185,31 @@
   .selected {
     border: 2px solid yellow; /* 🔥 Destaca el ítem seleccionado */
   }
+
+  .makeBouquet-tutorial {
+    
+  }
+  
+  .makeBouquet-tutorial div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .makeBouquet-tutorial img{
+        width: 250px;
+        border-radius: 30px;
+        box-shadow: 0px 1px 10px rgba(255, 255, 255, 1);
+        pointer-events: none;
+  }
+  
+  .makeBouquet-tutorial li{
+        margin: 10px;
+        word-wrap: break-word;
+        text-overflow: ellipsis;
+        font-size: small;
+  }
   
 
   /*Tablet portrait*/
@@ -252,15 +277,15 @@
     .accs-container{ left: 5px; }
     .foliage-container{ right: 5px; }
     
-    .foliage-container h3, .accs-section h3{
+    .foliage-container h3, .accs-container h3{
         font-size: xx-small;
         margin: 3px;
     }
-    .foliage-container hr, .accs-section hr{
+    .foliage-container hr, .accs-container hr{
         margin: 0;
         padding: 0;
     }
-    .foliage-container div, .accs-section div{
+    .foliage-container div, .accs-container div{
         display: flex;
         flex-direction: row;
         margin:5px;
@@ -330,8 +355,7 @@
     
     .foliage-section{
         right: 5px;
-    }
-    
+    }  
     
     .bottom-section{
         flex-direction: row-reverse;
@@ -362,28 +386,31 @@
         height: 72%;
     }
     
-    .accs-container, .foliage-container{
+    .foliage-container, .accs-container{
         position: fixed;
         bottom: 16dvh;
-        width: fit-content;
+        width: 40dvw;
         height: fit-content;
     }
-
-    .accs-container{ left: 5px; }
-    .foliage-container{ right: 5px; }
     
-    .foliage-container h3, .accs-section h3{
+    .foliage-container .element-box, .accs-container .element-box{
+        margin: 2px;
+    }
+
+    .foliage-container{ right: 5px; }
+    .accs-container{ left: 5px; }
+    
+    .foliage-container h3, .accs-container h3{
         font-size: xx-small;
         margin: 3px;
     }
-    .foliage-container hr, .accs-section hr{
+    .foliage-container hr, .accs-container hr{
         margin: 0;
         padding: 0;
     }
-    .foliage-container div, .accs-section div{
+    .foliage-container div, .accs-container div{
         display: flex;
         flex-direction: row;
-        margin:5px;
     }
 
     .flowers-container{
@@ -393,7 +420,6 @@
     .flowers-container{
         width: fit-content;
     }
-    
 
     .flower-position {
         background-color: #555;
@@ -424,7 +450,6 @@
       background-color: #e0e0e0;
       scale: 1.1;
       }    
-    
 }
 
 /*Mobile Landscape*/

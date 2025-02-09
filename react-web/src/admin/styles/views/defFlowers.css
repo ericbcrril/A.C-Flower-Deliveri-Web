@@ -36,17 +36,20 @@
 
 .table-container{
     overflow-y: scroll;
-    max-height: 60vh;
+    max-height: 25dvh;
+    scrollbar-color: #01050d transparent;
 }
 .table-container0{
     overflow-y: scroll;
-    max-height: 25vh;
+    max-height: 25dvh;
+    scrollbar-color: #01050d transparent;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     overflow-y: scroll;
+    scrollbar-color: #01050d transparent;
 }
 
 

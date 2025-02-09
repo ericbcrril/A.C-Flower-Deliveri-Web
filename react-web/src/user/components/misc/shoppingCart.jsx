@@ -60,30 +60,50 @@ function ShoppingCart({ visible, isLogged }) {
 
   const handleDateChange = (event) => {
     const selectedDate = event.target.value;
-    const today = new Date().toISOString().split("T")[0];
-
-    if (selectedDate === today) {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1); // Obtener la fecha de mañana
+  
+    // Convertir fechas a formato YYYY-MM-DD en zona horaria local
+    const todayStr = today.toLocaleDateString('fr-CA'); // Formato YYYY-MM-DD
+    const tomorrowStr = tomorrow.toLocaleDateString('fr-CA');
+    const selectedDay = new Date(selectedDate).getDay(); // 0 = Domingo, 6 = Sábado
+    const isTomorrow = selectedDate === tomorrowStr; // Verificar si la fecha es mañana
+  
+    let minHour = 11;
+    let maxHour = 23;
+  
+    if (selectedDay === 6) { // Si es sábado
+      minHour = 10; // Horario de sábado: 10 AM - 6 PM
+      maxHour = 18;
+    }
+  
+    if (selectedDate === todayStr) {
+      // Si la fecha es hoy
       const now = new Date();
       now.setHours(now.getHours() + 2); // Sumar 2 horas
+  
       let hours = now.getHours();
       let minutes = now.getMinutes();
-
-      // Ajustar a las restricciones (8 AM - 10 PM)
-      if (hours < 8) {
-        hours = 8;
+  
+      if (hours < minHour) {
+        hours = minHour;
         minutes = 0;
-      } else if (hours >= 22) {
-        hours = 22;
+      } else if (hours >= maxHour) {
+        hours = maxHour;
         minutes = 0;
       }
-
-      const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-      setMinTime(formattedTime);
+  
+      setMinTime(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`);
+    } else if (isTomorrow) {
+      // Si la fecha es mañana, establecer la hora mínima según el día
+      setMinTime(`${String(minHour).padStart(2, '0')}:00`);
     } else {
-      setMinTime('11:00'); // Rango mínimo predeterminado
+      // Si es otro día, usar la hora mínima predeterminada para ese día
+      setMinTime(`${String(minHour).padStart(2, '0')}:00`);
     }
   };
-
+  
   const handleDelete = (indexToRemove) => {
     const updatedItems = items.filter((_, index) => index !== indexToRemove);
     setItems(updatedItems);

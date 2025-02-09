@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../../shared/styles/views/menu.css';
 import '../styles/html-grandiant.css';
@@ -6,6 +6,7 @@ import NavBar from "../components/misc/navbar";
 import OptionRect from "../components/menu/optionRect";
 import { ToastContainer, toast } from 'react-toastify';
 import { sendEmail } from '../../scripts/sendEmailNotification';
+import React from 'react';
 
 function Menu({ isLogged }) {
 
@@ -72,6 +73,32 @@ function Menu({ isLogged }) {
     };
   }, []);
 
+  const [winW, setWinW] = useState(window.innerWidth);
+    const [winH, setWinH] = useState(window.innerHeight);
+
+      useEffect(() => {
+    const handleResizeW = () => setWinW(window.innerWidth);
+    const handleResizeH = () => setWinH(window.innerHeight);
+    window.addEventListener('resize', handleResizeW);
+    window.addEventListener('resize', handleResizeH);
+    return () => {
+      window.removeEventListener('resize', handleResizeW);
+      window.removeEventListener('resize', handleResizeH);
+    };
+  }, [winW, winH]);
+    
+        let widthForOpt = 200;
+    
+        if(winW > 450 && winW < 1024 && winH > 720){//Tablets Port
+            widthForOpt = 200;
+        }    
+        if(winW < 450){//Movil Port
+            widthForOpt = 150;
+        }    
+        if(winH < 450 && winW > 650 && winW < 950){//Movil Land
+            widthForOpt = 200;
+        }    
+
   return (
     <>
       <NavBar isLogged={isLogged} />
@@ -80,15 +107,15 @@ function Menu({ isLogged }) {
       </div>
 
       <main className='menu-main'>
-        <section>
+        <section className='opts-container-menu'>
           <Link to="/Ramos" className='menu-opt'>
-            <OptionRect w={200} img="images/menu-sections/bouquets.gif" title="Ramos" className={"trl10"} />
+            <OptionRect w={widthForOpt} img="images/menu-sections/bouquets.gif" title="Ramos" className={"trl10"} />
           </Link>
           <Link to="/ArmarRamo" className='menu-opt'>
-            <OptionRect w={200} img="images/menu-sections/make-bouquet.gif" title="Armar Ramo" className={"trl-10"} />
+            <OptionRect w={widthForOpt} img="images/menu-sections/make-bouquet.gif" title="Armar Ramo" className={"trl-10"} />
           </Link>
           <Link to={isLogged.login ? "/ConsultarPedido" : "/Login"} className='menu-opt'>
-            <OptionRect w={200} img="images/menu-sections/view-order.gif" title="Consultar pedido" className={"trl10"} />
+            <OptionRect w={widthForOpt} img="images/menu-sections/view-order.gif" title="Consultar pedido" className={"trl10"} />
           </Link>
         </section>
         <section>

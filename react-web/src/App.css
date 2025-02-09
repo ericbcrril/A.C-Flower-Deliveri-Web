@@ -6,12 +6,46 @@ html{
   background-color: rgb(130,87,214);
   background: linear-gradient(90deg, rgba(130,87,214,1) 10%, rgba(235,248,192,1) 100%);
   overflow: hidden;
+  height: 100dvh;
 }
 
-html, body{
-  height: 100%;
+body{
+  height: 100dvh;
   margin: 0;
 }
+
+.load-p{
+  color: #10908c;
+  font-size: large;
+  font-weight: bold;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg) translateY(0px); }
+  25% { transform: rotate(-10deg) translateY(-5px); }
+  50% { transform: rotate(10deg) translateY(5px); }
+  75% { transform: rotate(-5deg) translateY(-3px); }
+}
+
+.animated-text {
+  display: inline-flex;
+  font-weight: bold;
+  color: #137f7c;
+  font-family: sans-serif;
+}
+
+.animated-text span {
+  display: inline-block;
+  animation: wave 1s infinite ease-in-out;
+}
+
+.animated-text span:nth-child(1) { animation-delay: 0s; }
+.animated-text span:nth-child(2) { animation-delay: 0.1s; }
+.animated-text span:nth-child(3) { animation-delay: 0.2s; }
+.animated-text span:nth-child(4) { animation-delay: 0.3s; }
+.animated-text span:nth-child(5) { animation-delay: 0.4s; }
+.animated-text span:nth-child(6) { animation-delay: 0.5s; }
+.animated-text span:nth-child(7) { animation-delay: 0.6s; }
 
 button, .div-button {
   background-color: #01050d; 

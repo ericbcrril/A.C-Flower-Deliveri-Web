@@ -25,51 +25,80 @@ section{
     color: #191919;
 }
 
-.help-section{
-    position: absolute;
+.help-section {
+    position: fixed;
+    bottom: 20px;
+    left: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    height: 400px;
-    width: fit-content;
+    width: 300px;
     padding: 20px;
-    bottom: 0; left: 50px;
-    background-color: white;
+    background-color: #fff;
     border-radius: 20px;
-    border: .5px solid rgba(0, 0, 0, .5);
-    white-space: nowrap;
-    animation: Apeardown .5s forwards;
+    border: 0.5px solid rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateY(100%);
+    opacity: 0;
 }
 
-.close-help-sect{
+.help-section.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.help-section.hidden {
+    display: none;
+}
+
+.close-help-sect {
     position: absolute;
-    left: 0; top: 0;
-    font-size: x-large;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
     cursor: pointer;
+    color: #191919;
 }
 
-.help-section div{
+.help-section div {
     text-align: center;
+}
+
+.help-section a {
+    color: #007bff;
+    text-decoration: none;
+    margin: 5px 0;
+}
+
+.help-section a:hover {
+    text-decoration: underline;
+}
+
+.help-section h2 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    color: #191919;
+}
+
+.social-icons {
     display: flex;
-    flex-direction: column;
+    gap: 10px;
+    font-size: 2rem;
 }
 
-.help-section a{
-    color: blue;
+.social-icons a {
+    color: #191919;
+    transition: transform 0.3s;
 }
 
-.help-section h2{
-    margin: 5px;
+.social-icons a:hover {
+    transform: scale(1.1);
 }
 
-.social-icons{
-    display: flex;
-    flex-direction: row !important;
-    font-size: xx-large;
-    margin: 10px;
-    cursor: pointer;
-}
 
 .btn-help{
     position: fixed;
@@ -90,12 +119,19 @@ section{
         overflow: auto;
     }
     
-    section{
+    .opts-container-menu{
         flex-direction: column;
+        align-items: center;
+        margin-top: 8dvh;
+        width: 100dvw;
+        scroll-behavior: smooth;
+        overflow-y: scroll;
+        scrollbar-width: auto;
+        scrollbar-color: #0032cc white;
     }
 
     .menu-opt{
-        margin-top: 15%;
+        
     }
 
     .btn-subs{
@@ -110,17 +146,24 @@ section{
 /*Mobile Portrait*/
 @media (max-width: 450px) {
     .menu-main{
-        height: 100vh;
+        height: 100%;
         justify-content: flex-start !important;
-        overflow: auto;
+        overflow: hidden;
     }
     
-    section{
+    .opts-container-menu{
         flex-direction: column;
+        align-items: center;
+        margin-top: 8dvh;
+        width: 100dvw;
+        scroll-behavior: smooth;
+        overflow-y: scroll;
+        scrollbar-width: auto;
+        scrollbar-color: #0032cc white;
     }
 
-    .menu-opt{
-        margin-top: 15%;
+    .trl10, .trl-10{
+       translate: 0; 
     }
 
     .btn-subs{
@@ -129,6 +172,9 @@ section{
         right: 0;
         padding: 10px;
         z-index: 3;
+    }
+    .help-section{
+        height: 300px;
     }
 }
 
@@ -167,5 +213,9 @@ section{
         right: 0;
         padding: 10px;
         z-index: 3;
+    }
+
+    .help-section{
+        height: 200px;
     }
 }

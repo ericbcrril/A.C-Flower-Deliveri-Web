@@ -91,17 +91,21 @@ function ViewOrder({isLogged}) {
 
     //Ver Ramo 
         // Calcular posiciones de flores en función del tamaño del ramo
-          const [winW, setWinW] = useState(window.innerWidth);
           const [bouquetVisible, setBouquetVisible] = useState(false);
         
       // Manejar el evento de redimensionamiento de la ventana
+        const [winW, setWinW] = useState(window.innerWidth);
+        const [winH, setWinH] = useState(window.innerHeight);
         useEffect(() => {
-          const handleResize = () => setWinW(window.innerWidth);
-          window.addEventListener('resize', handleResize);
+          const handleResizeW = () => setWinW(window.innerWidth);
+          const handleResizeH = () => setWinH(window.innerHeight);
+          window.addEventListener('resize', handleResizeW);
+          window.addEventListener('resize', handleResizeH);
           return () => {
-            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', handleResizeW);
+            window.removeEventListener('resize', handleResizeH);
           };
-        }, []);
+        }, [winW, winH]);
     
       const flowerPositions = useMemo(() => {
         const positions = [];
@@ -122,17 +126,20 @@ function ViewOrder({isLogged}) {
         let value0 = 18;
         let value1 = 11;
         let value2 = 8;
-    
-        if(winW < 1024){
-           value0 = 10;
-           value1 = 6;
-           value2 = 4;
-        }   
-        if(winW < 450){
-           value0 = 6.5;
-           value1 = 4;
-           value2 = 2.8;
-        }   
+
+        if(winW > 449 && winW < 1025 && winH > 719){//Tablets Port
+        value0 = 9.5; 
+        value1 = 5.8;
+        value2 = 4;
+        }    
+        if(winW < 451){//Movil Port
+        value0 = 6.5;
+        value1 = 4;
+        value2 = 2.8;
+        }    
+        if(winH < 451 && winW > 649 && winW < 951){//Movil Land
+        
+        } 
     
           createCircle(9, winW / value0);
           createCircle(13, winW / value1);

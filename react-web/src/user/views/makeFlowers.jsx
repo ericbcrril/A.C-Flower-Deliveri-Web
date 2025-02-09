@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import NavBar from "../components/misc/navbar";
+import LoadLetters from "../../shared/components/misc/loadLetters";
 import "../styles/views/makeFlowers.css";
 import { getItems } from "../../scripts/apis";
 import sanitizeString from '../../scripts/sanitizeStrings';
@@ -18,19 +19,22 @@ const [items, setItems] = useState([]);
 
 
   // Manejar el evento de redimensionamiento de la ventana
+  const [winW, setWinW] = useState(window.innerWidth);
+  const [winH, setWinH] = useState(window.innerHeight);
   useEffect(() => {
     const handleResizeW = () => setWinW(window.innerWidth);
-    const handleResizeH = () => setWinW(window.innerHeight);
+    const handleResizeH = () => setWinH(window.innerHeight);
     window.addEventListener('resize', handleResizeW);
     window.addEventListener('resize', handleResizeH);
     return () => {
       window.removeEventListener('resize', handleResizeW);
       window.removeEventListener('resize', handleResizeH);
     };
-  }, []);
+  }, [winW, winH]);
   useEffect(() => {
     const getItemsBd = async () => {
       try {
+        openDialogTutorial();
         let data = await getItems('items');
         setItems(data);
       } catch (error) {
@@ -53,9 +57,6 @@ const [items, setItems] = useState([]);
 
   // Calcular posiciones de flores en función del tamaño del ramo
 
-  const [winW, setWinW] = useState(window.innerWidth);
-  const [winH, setWinH] = useState(window.innerHeight);
-
   const flowerPositions = useMemo(() => {
     const positions = [];
     const center = { x: 0, y: 0 };
@@ -76,17 +77,17 @@ const [items, setItems] = useState([]);
     let value1 = 11;
     let value2 = 8;
 
-    if(winW > 450 && winW < 1024 && winH > 720){//Tablets Port
+    if(winW > 449 && winW < 1025 && winH > 719){//Tablets Port
        value0 = 9.5; 
        value1 = 5.8;
        value2 = 4;
     }    
-    if(winW < 450){//Movil Port
+    if(winW < 451){//Movil Port
        value0 = 6.5;
        value1 = 4;
        value2 = 2.8;
     }    
-    if(winH < 450 && winW > 650 && winW < 950){//Movil Land
+    if(winH < 451 && winW > 649 && winW < 95){//Movil Land
        
     }    
 
@@ -221,6 +222,8 @@ const handleDragStart = (e, item) => {
   const [minTime, setMinTime] = useState('11:00');
   const dialogOrderForm = useRef(null);
   const dialogEditor = useRef(null);
+  const dialogTutorial = useRef(null);
+  const [numImg, setNumImg] = useState(0);
   const [dialogMessage, setDialogMessage] = useState('');
   const [localities, setLocalities] = useState(zapopanJSON); // Estado para las localidades
   const navigate = useNavigate();
@@ -279,29 +282,87 @@ const handleDragStart = (e, item) => {
 
   const handleDateChange = (event) => {
     const selectedDate = event.target.value;
-    const today = new Date().toISOString().split("T")[0];
-
-    if (selectedDate === today) {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1); // Obtener la fecha de mañana
+  
+    // Convertir fechas a formato YYYY-MM-DD en zona horaria local
+    const todayStr = today.toLocaleDateString('fr-CA'); // Formato YYYY-MM-DD
+    const tomorrowStr = tomorrow.toLocaleDateString('fr-CA');
+    const selectedDay = new Date(selectedDate).getDay(); // 0 = Domingo, 6 = Sábado
+    const isTomorrow = selectedDate === tomorrowStr; // Verificar si la fecha es mañana
+  
+    let minHour = 11;
+    let maxHour = 23;
+  
+    if (selectedDay === 6) { // Si es sábado
+      minHour = 10; // Horario de sábado: 10 AM - 6 PM
+      maxHour = 18;
+    }
+  
+    if (selectedDate === todayStr) {
+      // Si la fecha es hoy
       const now = new Date();
       now.setHours(now.getHours() + 2); // Sumar 2 horas
+  
       let hours = now.getHours();
       let minutes = now.getMinutes();
-
-      // Ajustar a las restricciones (8 AM - 10 PM)
-      if (hours < 8) {
-        hours = 8;
+  
+      if (hours < minHour) {
+        hours = minHour;
         minutes = 0;
-      } else if (hours >= 22) {
-        hours = 22;
+      } else if (hours >= maxHour) {
+        hours = maxHour;
         minutes = 0;
       }
-
-      const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-      setMinTime(formattedTime);
+  
+      setMinTime(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`);
+    } else if (isTomorrow) {
+      // Si la fecha es mañana, establecer la hora mínima según el día
+      setMinTime(`${String(minHour).padStart(2, '0')}:00`);
     } else {
-      setMinTime('11:00'); // Rango mínimo predeterminado
+      // Si es otro día, usar la hora mínima predeterminada para ese día
+      setMinTime(`${String(minHour).padStart(2, '0')}:00`);
     }
   };
+
+  function selectImg() {
+        switch (numImg) {
+          case 0:
+            return(
+              <div>
+                <h3>Seleccionar elementos</h3>
+                <img src="images/tutorial-makeBouquet/0.webp" alt="tut"/>
+                <li>Haz click en el elemento que deseas agregar.</li>
+              </div>
+            );
+          case 1:
+            return(
+              <div>
+                <h3>Colocar elementos</h3>
+                <img src="images/tutorial-makeBouquet/1.webp" alt="tut"/>
+                <li>Luego, haz click en la casilla donde quieres colocarlo.</li>
+              </div>
+            );
+          case 2:
+            return(
+              <div>
+                <h3>Eliminar elementos</h3>
+                <img src="images/tutorial-makeBouquet/2.webp" alt="tut"/>
+                <li>Haz doble click sobre el elemento para eliminarlo.</li>
+                <li>Al finalizar el ramo, click en continuar.</li>
+              </div>
+            );
+          default:
+            return(
+              <div>
+                <img src="images/tutorial-makeBouquet/0.webp" alt="tut"/>
+                <li>Haz click en el elemento que deseas agregar.</li>
+              </div>
+            );
+            break;
+        }
+  }
 
   async function openDialog() {
     let res = await genBouquet();
@@ -324,6 +385,14 @@ function openDialogEditor(message) {
 
 function closeDialogEditor() {
     dialogEditor.current.close();
+}
+
+function openDialogTutorial() {
+    dialogTutorial.current.showModal();
+}
+
+function closeDialogTutorial() {
+  dialogTutorial.current.close();
 }
   
 
@@ -392,7 +461,8 @@ function closeDialogEditor() {
               <button onClick={() => isLogged.login ? openDialog() : navigate('/Login')}>Continuar</button>
           </div>
           <div className="bottom-section-div1">
-            {flowerOptions?.map(flower => (
+            {items.length > 0 ?
+            flowerOptions?.map(flower => (
               <div className="flower-and-name-container">
               <div
                 key={flower._id}
@@ -410,14 +480,19 @@ function closeDialogEditor() {
               </div>
               <p>{flower.name}</p>
               </div>
-            ))}
+            ))
+            :
+            <div style={{width: '100%', display: "flex", alignItems: "center", justifyContent: "center"}}>
+              <LoadLetters size={20}/>
+            </div>
+            }
           </div>
         </section>
 
         {/* Editor */}
         <section className="editor-section">
           {/* Contenedor de Accesorios */}
-          <div className="accs-container foliage-container">
+          <div className="accs-container">
             <h3>Accesorios</h3>
             <hr />
             <div>
@@ -572,6 +647,7 @@ function closeDialogEditor() {
               </div>
             </form>
           </dialog>
+          
         </section>
       </main>
 
@@ -580,6 +656,18 @@ function closeDialogEditor() {
         <section>
           <p>{dialogMessage}</p>
           <button onClick={closeDialogEditor}>Ok</button>
+        </section>
+      </dialog>
+      
+      <dialog ref={dialogTutorial}>
+        <section className="makeBouquet-tutorial">
+          {selectImg()}
+          <div style={{flexDirection: "row"}}>
+          <button onClick={closeDialogTutorial}>Ok</button>
+          {numImg < 2 &&
+            <button onClick={() => setNumImg(numImg + 1)}>{'Siguiente >'}</button>
+          }
+          </div>
         </section>
       </dialog>
 

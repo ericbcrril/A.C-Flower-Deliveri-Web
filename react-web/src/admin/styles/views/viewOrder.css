@@ -18,7 +18,7 @@
     width: 350px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow-y: scroll;
-    scrollbar-color: black transparent;
+    scrollbar-color: #01050d rgba(0,0,0,0);
     max-height: 60%;
 }
 
@@ -175,7 +175,7 @@ button:active {
     
     .order-section, .details-section, .progress-section {
         margin: 10px;
-        width: 100dvw;
+        width: 80dvw;
         animation: Apearup .5s forwards;
         position: absolute;
     }
@@ -189,7 +189,7 @@ button:active {
     .progress-section{
         position: absolute;
         justify-content: center;
-        width: 100dvw;
+        width: 80dvw;
         height: fit-content;
         background-color: white;
         border-radius: 20px;
